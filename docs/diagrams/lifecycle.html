@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofDrop draw lifecycle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --paper:#f6f0e4; --ink:#171410; --muted:#756b5c; --rule:#d8cdb9; --accent:#ff4d00; }
+    body { font-family:'Space Grotesk',system-ui,sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:3rem 2rem; }
+    .frame { max-width:1200px; width:100%; }
+    .eyebrow { font-family:'IBM Plex Mono',monospace; font-size:.64rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin-bottom:.5rem; }
+    h1 { font-size:clamp(1.6rem,2.4vw + .8rem,2.2rem); font-weight:600; letter-spacing:-.045em; line-height:1.1; margin-bottom:1.5rem; }
+    .diagram-container { width:100%; overflow-x:auto; }
+    svg { width:100%; min-width:1060px; display:block; }
+    @media print { .diagram-container { overflow-x:visible; } svg { min-width:0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">State machine · Settlement</p>
+    <h1>Every exit is visible.</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1100 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lifecycle-title lifecycle-desc">
+        <title id="lifecycle-title">ProofDrop draw lifecycle</title>
+        <desc id="lifecycle-desc">A draw moves from created to open and closed, then commits its entrant list, captures a seed, runs the circuit, and settles or refunds.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#756b5c"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ff4d00"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f6f0e4"/>
+
+        <!-- transitions first -->
+        <line x1="170" y1="210" x2="196" y2="210" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="340" y1="210" x2="366" y2="210" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="510" y1="210" x2="536" y2="210" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="680" y1="210" x2="706" y2="210" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="850" y1="210" x2="876" y2="210" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <path d="M 945,240 V 310 Q 945,318 937,318 H 850" fill="none" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <path d="M 440,240 V 400 H 990 V 382" fill="none" stroke="#756b5c" stroke-width="1.1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+        <!-- labels -->
+        <rect x="172" y="190" width="22" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="183" y="200" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono',monospace" text-anchor="middle">OPEN</text>
+        <rect x="342" y="190" width="22" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="353" y="200" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono',monospace" text-anchor="middle">TIME</text>
+        <rect x="512" y="190" width="24" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="524" y="200" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono',monospace" text-anchor="middle">ROOT</text>
+        <rect x="682" y="190" width="24" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="694" y="200" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono',monospace" text-anchor="middle">SEED</text>
+        <rect x="852" y="190" width="24" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="864" y="200" fill="#ff4d00" font-size="7" font-family="'IBM Plex Mono',monospace" text-anchor="middle">EVAL</text>
+        <rect x="892" y="252" width="58" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="921" y="262" fill="#ff4d00" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">PROOF + PAY</text>
+        <rect x="592" y="390" width="106" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="645" y="400" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">NO ENTRIES / ABANDONED</text>
+
+        <!-- row 1 states -->
+        <rect x="30" y="180" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="100" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Created</text>
+        <text x="100" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">prize escrowed</text>
+
+        <rect x="200" y="180" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="270" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Open</text>
+        <text x="270" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">signed entries</text>
+
+        <rect x="370" y="180" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="440" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Closed</text>
+        <text x="440" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">window ended</text>
+
+        <rect x="540" y="180" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="610" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Committed</text>
+        <text x="610" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">root + seed block</text>
+
+        <rect x="710" y="180" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="780" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Seeded</text>
+        <text x="780" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">block hash captured</text>
+
+        <rect x="880" y="180" width="140" height="60" rx="6" fill="#fff1e8" stroke="#ff4d00" stroke-width="1.4"/>
+        <text x="950" y="205" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Drawn</text>
+        <text x="950" y="221" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">winner index</text>
+
+        <!-- row 2 states -->
+        <rect x="540" y="320" width="140" height="60" rx="6" fill="#fff1e8" stroke="#ff4d00" stroke-width="1.4"/>
+        <text x="610" y="345" fill="#171410" font-size="14" font-weight="600" text-anchor="middle">Settled</text>
+        <text x="610" y="361" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">merkle + payout</text>
+
+        <rect x="880" y="320" width="140" height="60" rx="6" fill="#f6f0e4" stroke="#756b5c" stroke-width="1.1" stroke-dasharray="4,3"/>
+        <text x="950" y="345" fill="#756b5c" font-size="14" font-weight="600" text-anchor="middle">Refunded</text>
+        <text x="950" y="361" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace" text-anchor="middle">prize returns</text>
+
+        <!-- legend -->
+        <line x1="30" y1="470" x2="66" y2="470" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="74" y="473" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace">NORMAL PATH</text>
+        <line x1="200" y1="470" x2="236" y2="470" stroke="#756b5c" stroke-width="1.1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="244" y="473" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono',monospace">REFUND PATH</text>
+        <line x1="370" y1="470" x2="406" y2="470" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <text x="414" y="473" fill="#ff4d00" font-size="8" font-family="'IBM Plex Mono',monospace">DECISION + SETTLEMENT</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

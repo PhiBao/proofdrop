@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofDrop architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --paper: #f6f0e4;
+      --ink: #171410;
+      --muted: #756b5c;
+      --rule: #d8cdb9;
+      --accent: #ff4d00;
+      --green: #1f7a4c;
+      --sans: 'Space Grotesk', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1200px; width: 100%; }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.64rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--sans);
+      font-size: clamp(1.6rem, 2.4vw + 0.8rem, 2.2rem);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    svg { width: 100%; min-width: 1060px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · ProofDrop</p>
+    <h1>Escrow, list, circuit, proof.</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1100 640" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-title architecture-desc">
+        <title id="architecture-title">ProofDrop system architecture</title>
+        <desc id="architecture-desc">Wallets enter through a static proof app, the Rust service commits the entrant list and orchestrates a draw, and an X Layer escrow contract calls a TapeOut circuit to decide the winner.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#756b5c"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#ff4d00"/></marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#f6f0e4"/>
+
+        <!-- zones -->
+        <rect x="24" y="86" width="252" height="470" rx="8" fill="rgba(23,20,16,0.02)" stroke="rgba(23,20,16,0.12)" stroke-width="0.8"/>
+        <rect x="86" y="90" width="128" height="12" rx="2" fill="#f6f0e4"/>
+        <text x="150" y="100" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle" letter-spacing="0.14em">PUBLIC</text>
+
+        <rect x="310" y="86" width="382" height="470" rx="8" fill="rgba(23,20,16,0.02)" stroke="rgba(23,20,16,0.12)" stroke-width="0.8"/>
+        <rect x="458" y="90" width="86" height="12" rx="2" fill="#f6f0e4"/>
+        <text x="501" y="100" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle" letter-spacing="0.14em">PROOFDROP</text>
+
+        <rect x="726" y="86" width="350" height="470" rx="8" fill="rgba(23,20,16,0.02)" stroke="rgba(23,20,16,0.12)" stroke-width="0.8"/>
+        <rect x="858" y="90" width="86" height="12" rx="2" fill="#f6f0e4"/>
+        <text x="901" y="100" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle" letter-spacing="0.14em">X LAYER</text>
+
+        <!-- arrows first -->
+        <line x1="248" y1="186" x2="338" y2="186" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="248" y1="432" x2="338" y2="432" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="415" y1="222" x2="415" y2="298" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="492" y1="336" x2="518" y2="336" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M 490,286 H 700 Q 708,286 708,278 V 258 Q 708,250 716,250 H 756" fill="none" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <line x1="858" y1="292" x2="858" y2="398" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+
+        <!-- labels -->
+        <rect x="270" y="166" width="58" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="299" y="176" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">ESCROW</text>
+        <rect x="270" y="412" width="58" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="299" y="422" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">SIGN ENTRY</text>
+        <rect x="428" y="250" width="74" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="465" y="260" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">REST + SIG</text>
+        <rect x="492" y="316" width="28" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="506" y="326" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">SQL</text>
+        <rect x="574" y="262" width="126" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="637" y="272" fill="#ff4d00" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">COMMIT · SEED · DRAW</text>
+        <rect x="878" y="334" width="88" height="14" rx="2" fill="#f6f0e4"/>
+        <text x="922" y="344" fill="#ff4d00" font-size="8" font-family="'IBM Plex Mono', monospace" text-anchor="middle">EVAL(ID, BYTES)</text>
+
+        <!-- nodes -->
+        <rect x="48" y="151" width="200" height="70" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <rect x="60" y="159" width="36" height="12" rx="2" fill="#f6f0e4" stroke="#d8cdb9" stroke-width="0.8"/>
+        <text x="78" y="168" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono', monospace" text-anchor="middle">USER</text>
+        <text x="64" y="193" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">Creator wallet</text>
+        <text x="64" y="208" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">escrow · metadata · lock</text>
+
+        <rect x="48" y="397" width="200" height="70" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <rect x="60" y="405" width="36" height="12" rx="2" fill="#f6f0e4" stroke="#d8cdb9" stroke-width="0.8"/>
+        <text x="78" y="414" fill="#756b5c" font-size="7" font-family="'IBM Plex Mono', monospace" text-anchor="middle">USER</text>
+        <text x="64" y="439" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">Entrant wallet</text>
+        <text x="64" y="454" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">free signed entry</text>
+
+        <rect x="340" y="151" width="150" height="70" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="356" y="174" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">Proof app</text>
+        <text x="356" y="190" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">React · wagmi</text>
+        <text x="356" y="204" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">Pages + DeWEB build</text>
+
+        <rect x="340" y="298" width="150" height="70" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="356" y="321" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">Rust API</text>
+        <text x="356" y="337" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">Axum · alloy</text>
+        <text x="356" y="351" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">entries · proofs</text>
+
+        <rect x="520" y="298" width="140" height="70" rx="6" fill="#f6f0e4" stroke="#171410" stroke-width="1.1"/>
+        <text x="536" y="321" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">SQLite</text>
+        <text x="536" y="337" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">public entrant list</text>
+        <text x="536" y="351" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">draw metadata</text>
+
+        <rect x="756" y="210" width="204" height="82" rx="6" fill="#fff1e8" stroke="#ff4d00" stroke-width="1.4"/>
+        <rect x="770" y="220" width="62" height="12" rx="2" fill="#f6f0e4" stroke="#ff4d00" stroke-width="0.7"/>
+        <text x="801" y="229" fill="#ff4d00" font-size="7" font-family="'IBM Plex Mono', monospace" text-anchor="middle">ESCROW</text>
+        <text x="772" y="255" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">ProofDrop contract</text>
+        <text x="772" y="270" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">prize · root · seed · payout</text>
+
+        <rect x="756" y="398" width="204" height="82" rx="6" fill="#fff1e8" stroke="#ff4d00" stroke-width="1.4"/>
+        <rect x="770" y="408" width="74" height="12" rx="2" fill="#f6f0e4" stroke="#ff4d00" stroke-width="0.7"/>
+        <text x="807" y="417" fill="#ff4d00" font-size="7" font-family="'IBM Plex Mono', monospace" text-anchor="middle">TAPE OUT</text>
+        <text x="772" y="443" fill="#171410" font-size="14" font-weight="600" font-family="'Space Grotesk', sans-serif">Circuit #24</text>
+        <text x="772" y="458" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">NAND / LATCH · eval()</text>
+
+        <!-- legend -->
+        <line x1="48" y1="596" x2="84" y2="596" stroke="#756b5c" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <text x="92" y="599" fill="#756b5c" font-size="8" font-family="'IBM Plex Mono', monospace">REQUEST</text>
+        <line x1="300" y1="596" x2="336" y2="596" stroke="#ff4d00" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+        <text x="344" y="599" fill="#ff4d00" font-size="8" font-family="'IBM Plex Mono', monospace">DECISION PATH</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

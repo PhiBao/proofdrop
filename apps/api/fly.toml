@@ -1,0 +1,29 @@
+app = "proofdrop-api"
+primary_region = "sin"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  DATABASE_URL = "sqlite:///data/proofdrop.db"
+  RPC_URL = "https://testrpc.xlayer.tech/terigon"
+  CHAIN_ID = "1952"
+  CONTRACT_ADDRESS = "0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a"
+  PROCESSOR_ADDRESS = "0x1f273c7743de768b33900a19cd8c003ca7eb71a2"
+  CIRCUIT_ID = "24"
+  EXPLORER_URL = "https://www.okx.com/web3/explorer/xlayer-test"
+  PUBLIC_BASE_URL = "https://proofdrop-api.fly.dev"
+  DEMO_MODE = "true"
+  RUST_LOG = "info,proofdrop_api=info"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[mounts]
+  source = "proofdrop_data"
+  destination = "/data"

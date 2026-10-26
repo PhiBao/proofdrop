@@ -1,0 +1,20 @@
+{
+  "name": "proofdrop",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@11.1.1",
+  "scripts": {
+    "dev": "pnpm --dir apps/web dev",
+    "build": "pnpm --dir apps/web build",
+    "preview": "pnpm --dir apps/web preview",
+    "test": "pnpm --dir apps/web test",
+    "contracts:test": "forge test --root contracts -vvv",
+    "api:dev": "cargo run --manifest-path apps/api/Cargo.toml",
+    "api:test": "cargo test --manifest-path apps/api/Cargo.toml"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}
