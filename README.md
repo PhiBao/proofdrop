@@ -8,6 +8,7 @@ ProofDrop is a verifiable giveaway protocol for creators. A creator escrows a pr
 - **API:** https://proofdrop-api.fly.dev
 - **Demo proof:** https://proofdrop-1xx.pages.dev/d/2/proof
 - **Network:** X Layer testnet (chain 1952). The mainnet wiring points at a live TapeOut circuit on X Layer mainnet; see [Verification](#verification).
+- **Source:** https://github.com/PhiBao/proofdrop
 - **Built for:** X Layer TapeOut Accelerate (Build X Series), deadline Dec 7, 2026.
 
 ---

@@ -58,7 +58,7 @@ export function Layout() {
           <div>
             <span className="mono-label">PROOF</span>
             <a href="#verify">Verify a draw</a>
-            <a href="https://github.com" target="_blank" rel="noreferrer">Source ↗</a>
+            <a href="https://github.com/PhiBao/proofdrop" target="_blank" rel="noreferrer">Source ↗</a>
           </div>
         </div>
         <p className="footer-fine mono">
