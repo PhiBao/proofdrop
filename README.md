@@ -93,9 +93,13 @@ The mainnet integration uses **TapeOut circuit #24** (17 inputs, 9 outputs, 140 
 
 Two diagrams are included as self-contained HTML:
 
-- [`docs/diagrams/architecture.html`](docs/diagrams/architecture.html) — wallets → app → Rust API → escrow → TapeOut circuit.
-- [`docs/diagrams/draw-sequence.html`](docs/diagrams/draw-sequence.html) — the exact message order of a draw.
-- [`docs/diagrams/lifecycle.html`](docs/diagrams/lifecycle.html) — every state and exit, including refunds.
+- [`architecture.html`](docs/diagrams/architecture.html) — wallets → app → Rust API → escrow → TapeOut circuit.
+- [`draw-sequence.html`](docs/diagrams/draw-sequence.html) — the exact message order of a draw.
+- [`lifecycle.html`](docs/diagrams/lifecycle.html) — every state and exit, including refunds.
+
+![ProofDrop architecture](docs/diagrams/architecture.png)
+
+![ProofDrop draw sequence](docs/diagrams/draw-sequence.png)
 
 ```
 Creator / Entrant wallets
