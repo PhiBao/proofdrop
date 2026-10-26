@@ -242,6 +242,9 @@ async fn enter(
     Json(req): Json<EntryRequest>,
 ) -> Result<Json<Value>, ApiError> {
     let (address, address_lower) = normalize_address(&req.address)?;
+    if req.handle.as_ref().map(|h| h.len() > 50).unwrap_or(false) {
+        return Err(ApiError::BadRequest("handle must be at most 50 characters".into()));
+    }
     let expected = entry_message(state.cfg.chain_id, state.cfg.contract, id, address);
     if req.message.trim() != expected {
         return Err(ApiError::BadRequest(
@@ -349,6 +352,11 @@ async fn metadata(
     if req.payload.description.len() > 2_000 {
         return Err(ApiError::BadRequest(
             "description must be at most 2000 characters".into(),
+        ));
+    }
+    if req.payload.handle.as_ref().map(|h| h.len() > 50).unwrap_or(false) {
+        return Err(ApiError::BadRequest(
+            "handle must be at most 50 characters".into(),
         ));
     }
     if let Some(url) = &req.payload.image_url {

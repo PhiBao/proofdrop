@@ -185,16 +185,12 @@ forge script script/Deploy.s.sol \
 Deploy to X Layer mainnet with the live TapeOut circuit:
 
 ```bash
-cd contracts
-export PRIVATE_KEY=0x...
-export PROCESSOR=0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6
-export CIRCUIT_ID=24
-export FEE_BPS=100
-export MIN_FEE=1000000000000000
-export ROUNDS=4
-forge script script/Deploy.s.sol \
-  --rpc-url https://rpc.xlayer.tech --broadcast
+./scripts/deploy-mainnet.sh
 ```
+
+The script reads `.secrets/deployer.env`, refuses to run below 0.008 OKB, deploys with processor `0x87BF…F9a6` and circuit `24`, and writes the resulting address to `.secrets/mainnet-contract.env`. The live testnet escrow at `0xC56d…530a` was deployed with `DEPLOY_MOCK=true` so the full flow could be rehearsed before mainnet gas was available.
+
+**Mainnet status:** the escrow bytecode and the real-circuit fork test are ready; the only external dependency is a small X Layer mainnet OKB gas budget. Per the verification table, the live demo is the testnet rehearsal, not a mainnet deployment.
 
 The fork test `testRealCircuitPreview` proves the real circuit integration and measures the call path:
 
@@ -360,6 +356,7 @@ A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). 
 ### Known risks
 
 - **Block-producer bias.** A block producer can influence the seed block. The list is committed first, which removes creator choice; it does not remove miner/sequencer influence.
+- **Processor implementation.** The TapeOut processor is an external contract; if its implementation is upgradeable, the `eval` behavior could change. The circuit ID and netlist are public, but high-value draws should pin and verify the processor implementation before escrow. The escrow treats the processor address as immutable.
 - **Off-chain list custody.** The public list lives in SQLite; the on-chain root is the source of truth. The recovery endpoint can rebuild the list only if the entries are supplied and the root matches. A lost list means the proof page cannot reconstruct the Merkle proof until restored.
 - **Testnet mock.** The live testnet demo uses a mock processor. The mainnet integration is fork-tested but not yet deployed.
 - **Prize promotion rules.** Entries are free. Do not use ProofDrop for paid-entry lotteries or regulated gambling without legal review.
