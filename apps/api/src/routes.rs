@@ -336,6 +336,11 @@ async fn metadata(
             "only the draw creator can set metadata".into(),
         ));
     }
+    if draw.entries_root.is_some() {
+        return Err(ApiError::Conflict(
+            "metadata is frozen once the entrant list is locked".into(),
+        ));
+    }
     if req.payload.title.trim().is_empty() || req.payload.title.len() > 120 {
         return Err(ApiError::BadRequest(
             "title must be between 1 and 120 characters".into(),
@@ -635,6 +640,13 @@ async fn proof(
     .fetch_all(&state.db)
     .await?;
     let tree = tree_for(&entries)?;
+    if let Some(committed) = &draw.entries_root {
+        if format!("{:#x}", tree.root()).to_lowercase() != committed.to_lowercase() {
+            return Err(ApiError::Internal(
+                "local entrant list does not match the committed root".into(),
+            ));
+        }
+    }
     let winner_entry = entries.iter().find(|e| e.idx == winner_index as i64);
     let winner = winner_entry.map(|e| e.address.clone());
     let merkle_proof = tree
@@ -880,4 +892,43 @@ async fn load_draw(state: &AppState, id: u64) -> Result<DrawRow, ApiError> {
         .fetch_optional(&state.db)
         .await?
         .ok_or_else(|| ApiError::NotFound(format!("draw {id} not found")))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use alloy::signers::local::PrivateKeySigner;
+    use alloy::signers::Signer;
+
+    #[tokio::test]
+    async fn entry_signature_binds_draw_chain_contract_and_entrant() {
+        let signer = PrivateKeySigner::random();
+        let address = signer.address();
+        let message = entry_message(1952, Address::ZERO, 7, address);
+        let signature = signer.sign_message(message.as_bytes()).await.unwrap();
+        verify_signature(&message, &signature.to_string(), address).unwrap();
+
+        let wrong = PrivateKeySigner::random().address();
+        assert!(verify_signature(&message, &signature.to_string(), wrong).is_err());
+
+        let other_draw = entry_message(1952, Address::ZERO, 8, address);
+        assert!(verify_signature(&other_draw, &signature.to_string(), address).is_err());
+    }
+
+    #[test]
+    fn metadata_payload_hex_is_stable() {
+        let payload = MetadataPayload {
+            title: "First Light".into(),
+            description: "Three entrants, one circuit.".into(),
+            image_url: None,
+            handle: Some("@proofdrop".into()),
+        };
+        let json = serde_json::to_vec(&payload).unwrap();
+        let hexed = hex::encode(&json);
+        assert!(hexed.starts_with("7b227469746c65223a"));
+        let decoded: MetadataPayload = serde_json::from_slice(&hex::decode(hexed).unwrap()).unwrap();
+        assert_eq!(decoded.title, "First Light");
+        assert_eq!(decoded.description, "Three entrants, one circuit.");
+        assert_eq!(decoded.handle.as_deref(), Some("@proofdrop"));
+    }
 }

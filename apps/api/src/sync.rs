@@ -27,7 +27,11 @@ pub async fn sync_one(state: &AppState, id: u64) -> Result<()> {
             .bind(id as i64)
             .fetch_one(&state.db)
             .await?;
-    let entry_count = (draw.entry_count as i64).max(offchain_entries);
+    let entry_count = if draw.entries_root == B256::ZERO {
+        offchain_entries
+    } else {
+        draw.entry_count as i64
+    };
     let now = Utc::now().timestamp();
 
     let entries_root = if draw.entries_root == B256::ZERO {

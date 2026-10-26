@@ -319,7 +319,7 @@ The proof page publishes the four round inputs, outputs, 9-bit values, accumulat
 5. **The moment (1:50–2:20).** Open the proof page. Replay the four circuit rounds; show the same winner index and the settlement transaction.
 6. **Business + close (2:20–3:00).** 1% fee, recurring creator drops, DeWEB proof page. “Don’t trust the draw. Replay it.”
 
-A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh).
+A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). The full shot list is in [`docs/demo-script.md`](docs/demo-script.md); paste-ready submission copy is in [`docs/submission.md`](docs/submission.md).
 
 ---
 

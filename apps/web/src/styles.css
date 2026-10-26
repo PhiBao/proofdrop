@@ -2440,3 +2440,10 @@ code {
     border-bottom-color: var(--orange);
   }
 }
+
+.data-cell .mono,
+.kv dd,
+.entries-row .mono {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
