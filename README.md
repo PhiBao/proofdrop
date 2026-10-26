@@ -274,6 +274,7 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/2/proof |
+| Open live draw | #3 “The Long Weekend”, 0.005 OKB, 7-day window, 3 entries: https://proofdrop-1xx.pages.dev/d/3 |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
 ### What is simulated in the live demo
