@@ -116,11 +116,11 @@ winnerIndex = accumulator % entryCount`}</pre>
         <div className="verify-table">
           <div className="verify-row">
             <span className="mono-label">REAL</span>
-            <p>Prize escrow, entry signatures, Merkle commitment, seed capture, draw transaction, payout, and proof page are real X Layer testnet transactions in this deployment.</p>
+            <p>Prize escrow, entry signatures, Merkle commitment, seed capture, the circuit call, payout, and the proof page are real X Layer mainnet transactions in the live deployment.</p>
           </div>
           <div className="verify-row">
             <span className="mono-label">SIMULATED</span>
-            <p>The testnet deployment uses a mock processor that implements the same eval interface. The mainnet deployment points at the live TapeOut processor and circuit #24. The README lists both addresses.</p>
+            <p>Nothing in the live path. The earlier testnet rehearsal used a mock processor; it remains documented in the README so the escrow and draw flow can be reproduced without mainnet funds.</p>
           </div>
           <div className="verify-row">
             <span className="mono-label">NOT CLAIMED</span>

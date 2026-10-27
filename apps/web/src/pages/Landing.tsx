@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { api } from '../api'
 import { DrawCard } from '../components/DrawCard'
 import { Countdown } from '../components/Countdown'
-import { okb, shortAddress, shortHash } from '../lib/format'
+import { formatDate, okb, shortAddress, shortHash } from '../lib/format'
 
 export function Landing() {
   const config = useQuery({ queryKey: ['config'], queryFn: api.getConfig })
@@ -12,7 +12,9 @@ export function Landing() {
   const draws = useQuery({ queryKey: ['draws'], queryFn: () => api.getDraws(12) })
 
   const featured = draws.data?.draws.find((d) => d.status === 'open' && d.closeTime > Date.now() / 1000)
-  const settled = draws.data?.draws.find((d) => d.status === 'settled' || d.status === 'drawn')
+  const latest = draws.data?.draws.find((d) => d.status === 'settled' || d.status === 'drawn')
+  const focus = featured ?? latest
+  const settled = latest
   const proof = useQuery({
     queryKey: ['proof', settled?.id],
     queryFn: () => api.getProof(settled!.id),
@@ -20,6 +22,8 @@ export function Landing() {
     retry: false,
   })
 
+  const drawLabel = stats.data?.draws === 1 ? 'draw' : 'draws'
+  const entryLabel = stats.data?.entries === 1 ? 'entry' : 'entries'
   const circuitId = config.data?.circuitId ?? '24'
   const processor = config.data?.processor ?? '0x87bf…'
 
@@ -44,47 +48,69 @@ export function Landing() {
               Start a draw
             </Link>
             <Link to="/explore" className="btn btn-outline btn-lg">
-              See live draws
+              Browse draws
             </Link>
           </div>
           <div className="hero-facts">
-            <span><strong>{stats.data?.draws ?? '—'}</strong> draws</span>
-            <span><strong>{stats.data?.entries ?? '—'}</strong> entries</span>
-            <span><strong>{stats.data ? okb(stats.data.escrowedWei, 2) : '—'}</strong> OKB escrowed</span>
+            <span><strong>{stats.data?.draws ?? '—'}</strong> {drawLabel}</span>
+            <span><strong>{stats.data?.entries ?? '—'}</strong> {entryLabel}</span>
+            <span><strong>{stats.data ? okb(stats.data.paidWei, 3) : '—'}</strong> OKB paid</span>
           </div>
         </div>
 
         <div className="stage-panel">
           <div className="stage-panel-head">
-            <span className="mono-label">LIVE STAGE</span>
+            <span className="mono-label">{featured ? 'LIVE STAGE' : latest ? 'LAST DRAW' : 'LIVE STAGE'}</span>
             <span className="mono stage-status">
               <span className="dot dot-good" />
-              {featured ? 'ENTRIES OPEN' : 'AWAITING DRAW'}
+              {featured ? 'ENTRIES OPEN' : latest ? 'PROOF READY' : 'AWAITING DRAW'}
             </span>
           </div>
-          {featured ? (
+          {focus ? (
             <>
-              <div className="stage-title">{featured.title || `Draw #${featured.id}`}</div>
+              <div className="stage-title">{focus.title || `Draw #${focus.id}`}</div>
               <div className="stage-prize">
-                <span>{okb(featured.prize)}</span>
+                <span>{okb(focus.prize)}</span>
                 <small>OKB</small>
               </div>
               <div className="stage-grid">
-                <div>
-                  <span className="mono-label">ENTRIES</span>
-                  <strong>{featured.entryCount}</strong>
-                </div>
-                <div>
-                  <span className="mono-label">CLOSES IN</span>
-                  <strong><Countdown closeTime={featured.closeTime} /></strong>
-                </div>
-                <div>
-                  <span className="mono-label">CREATOR</span>
-                  <strong className="mono">{shortAddress(featured.creator)}</strong>
-                </div>
+                {featured ? (
+                  <>
+                    <div>
+                      <span className="mono-label">ENTRIES</span>
+                      <strong>{featured.entryCount}</strong>
+                    </div>
+                    <div>
+                      <span className="mono-label">CLOSES IN</span>
+                      <strong><Countdown closeTime={featured.closeTime} /></strong>
+                    </div>
+                    <div>
+                      <span className="mono-label">CREATOR</span>
+                      <strong className="mono">{shortAddress(featured.creator)}</strong>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <span className="mono-label">WINNER</span>
+                      <strong className="mono">{shortAddress(latest?.winner, 5)}</strong>
+                    </div>
+                    <div>
+                      <span className="mono-label">ENTRIES</span>
+                      <strong>{latest?.entryCount}</strong>
+                    </div>
+                    <div>
+                      <span className="mono-label">CLOSED</span>
+                      <strong>{latest ? formatDate(latest.closeTime) : '—'}</strong>
+                    </div>
+                  </>
+                )}
               </div>
-              <Link to={`/d/${featured.id}`} className="btn btn-orange btn-block">
-                Enter free →
+              <Link
+                to={featured ? `/d/${featured.id}` : `/d/${latest!.id}/proof`}
+                className="btn btn-orange btn-block"
+              >
+                {featured ? 'Enter free →' : 'Open the proof →'}
               </Link>
             </>
           ) : (
@@ -218,7 +244,7 @@ export function Landing() {
         <div className="section-head row-head">
           <div>
             <span className="eyebrow mono">ON STAGE</span>
-            <h2>Live and recent draws.</h2>
+            <h2>Draws with receipts.</h2>
           </div>
           <Link to="/explore" className="btn btn-outline">
             All draws →

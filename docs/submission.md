@@ -37,16 +37,19 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - Circuit ID: `24` (17 inputs, 9 outputs, 140 gates)
 - Call: `eval(circuitId, bytes)`; four rounds per draw.
 - The processor and circuit ID are contract immutables and are published on every proof page.
-- Fork test: `forge test --match-contract ProofDropForkTest --fork-url https://rpc.xlayer.tech` calls the real circuit and measures ~1.36M gas for a four-round preview.
-- The live testnet rehearsal uses a mock processor with the same interface; this is labeled in the UI and README.
+- Live proof: round 0 input `0x496a01` returns `0xb400`; round 3 input `0x66f501` returns `0x5c01`.
+- Fork test: `forge test --match-contract ProofDropForkTest --fork-url https://rpc.xlayer.tech`.
 
 ## What is live
 
 - App: https://proofdrop-1xx.pages.dev
 - API: https://proofdrop-api.fly.dev
-- Proof: https://proofdrop-1xx.pages.dev/d/2/proof
-- Testnet escrow: `0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a`
-- Settlement tx: `0x479515ed827fa1e0aed145b6e88918da1454f3fd2ba396db3b75d85f04df41a8`
+- Proof: https://proofdrop-1xx.pages.dev/d/1/proof
+- Mainnet escrow: `0xc3cFf081656A338a84Ce80F4463aA69B375841D9`
+- Draw #1 root: `0xf502b58a94a6543bede59637252bf74b9dc67c8616a16556a98573de314018cf`
+- Draw #1 seed: `0x2bf83a2dd7de1738eb994837f075d7b87ed6f28061e3b476b19590919da9165c`
+- Winner: index `1` → `0xd56256179ac09a8a07a82cc6e5cddb971842d8fc`
+- Settlement tx: `0x6f22a9c5670d9972372d97676769033b681c89571e8e9f9d90274b5a32d65fd3`
 
 ## What is not claimed
 
@@ -54,7 +57,7 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - Block-producer neutrality.
 - An independent audit.
 - DeWEB is live for this build; the static build is DeWEB-ready and the current live surface is Cloudflare Pages.
-- The testnet demo’s circuit is a mock; mainnet uses the real circuit and is fork-tested but not yet funded.
+- There is one settled mainnet draw at submission time; there is no open mainnet draw in the live app.
 
 ## Links
 

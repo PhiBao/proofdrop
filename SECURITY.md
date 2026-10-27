@@ -17,7 +17,7 @@ The full threat model is in the README’s [Security model](../README.md#securit
 - The seed is a future X Layer block hash. The entrant list is committed before the seed block, but the block producer can theoretically influence the hash. This is disclosed, not hidden.
 - The public entrant list is stored off-chain and anchored on-chain by its Merkle root. A lost database can be reconstructed only from a backup that matches the committed root.
 - The TapeOut processor is an external contract. If its implementation is upgradeable, the `eval` behavior could change. High-value draws should pin and verify the processor implementation before escrow.
-- The testnet demo uses a mock processor; it is labeled in the UI and README.
+- The live mainnet deployment uses the real TapeOut circuit. An earlier testnet rehearsal used a mock processor and is retained only in the README for reproducibility.
 - There is no independent audit.
 
 ## Non-goals

@@ -6,8 +6,8 @@ ProofDrop is a verifiable giveaway protocol for creators. A creator escrows a pr
 
 - **Live app:** https://proofdrop-1xx.pages.dev
 - **API:** https://proofdrop-api.fly.dev
-- **Demo proof:** https://proofdrop-1xx.pages.dev/d/2/proof
-- **Network:** X Layer testnet (chain 1952). The mainnet wiring points at a live TapeOut circuit on X Layer mainnet; see [Verification](#verification).
+- **Demo proof:** https://proofdrop-1xx.pages.dev/d/1/proof
+- **Network:** X Layer mainnet (chain 196). The live draw is settled on mainnet and calls the real TapeOut circuit; see [Verification](#verification).
 - **Source:** https://github.com/PhiBao/proofdrop
 - **Built for:** X Layer TapeOut Accelerate (Build X Series), deadline Dec 7, 2026.
 
@@ -83,7 +83,7 @@ TapeOut is the only stack where the selection function can be:
 - **cheap to call** — `eval` is a read-only call; the draw transaction pays gas for the gate execution;
 - **legible** — the proof page can show the circuit ID and every round's bytes, not just “trust the RNG”.
 
-The mainnet integration uses **TapeOut circuit #24** (17 inputs, 9 outputs, 140 gates) on X Layer mainnet. The live testnet rehearsal uses a mock processor with the same `eval` interface. Why a general circuit instead of a bespoke RNG? Circuit #24 is already taped out, audited by usage, and its `eval` behavior is stable. The product's innovation is the commitment + escrow + proof system around it. A dedicated draw circuit is the next step once the mainnet escrow is funded; the contract takes `processor` and `circuitId` as immutables, so the engine can be swapped by deploying a new escrow.
+The live deployment uses **TapeOut circuit #24** (17 inputs, 9 outputs, 140 gates) on X Layer mainnet. Why a general circuit instead of a bespoke RNG? Circuit #24 is already taped out, audited by usage, and its `eval` behavior is stable. The product's innovation is the commitment + escrow + proof system around it. A dedicated draw circuit is the next step; the contract takes `processor` and `circuitId` as immutables, so the engine can be swapped by deploying a new escrow.
 
 > A circuit call is not a VRF. The seed is a block hash, and X Layer's block producer could theoretically influence it. The list is committed before the seed block exists, so the creator cannot choose a seed after seeing entries. This residual bias is disclosed on the proof page and in [Security](#security-model). It is a deliberate tradeoff for a transparent, replayable decision with no oracle dependency.
 
@@ -188,9 +188,9 @@ Deploy to X Layer mainnet with the live TapeOut circuit:
 ./scripts/deploy-mainnet.sh
 ```
 
-The script reads `.secrets/deployer.env`, refuses to run below 0.008 OKB, deploys with processor `0x87BF…F9a6` and circuit `24`, and writes the resulting address to `.secrets/mainnet-contract.env`. The live testnet escrow at `0xC56d…530a` was deployed with `DEPLOY_MOCK=true` so the full flow could be rehearsed before mainnet gas was available.
+The script reads `.secrets/deployer.env`, refuses to run below 0.008 OKB, deploys with processor `0x87BF…F9a6` and circuit `24`, and writes the resulting address to `.secrets/mainnet-contract.env`.
 
-**Mainnet status:** the escrow bytecode and the real-circuit fork test are ready; the only external dependency is a small X Layer mainnet OKB gas budget. Per the verification table, the live demo is the testnet rehearsal, not a mainnet deployment.
+**Mainnet status:** deployed at [`0xc3cF…41d9`](https://www.okx.com/web3/explorer/xlayer/address/0xc3cFf081656A338a84Ce80F4463aA69B375841D9). Draw #1 is settled and paid. The earlier testnet rehearsal (mock processor) remains in the repository and README only as a reproducibility path, not as the live app.
 
 The fork test `testRealCircuitPreview` proves the real circuit integration and measures the call path:
 
@@ -213,14 +213,14 @@ Required variables:
 | `PORT` | `8090` | API port |
 | `DATABASE_URL` | `sqlite://data/proofdrop.db` | SQLite path |
 | `RPC_URL` | `https://testrpc.xlayer.tech/terigon` | X Layer RPC |
-| `CHAIN_ID` | `1952` | 1952 testnet, 196 mainnet |
+| `CHAIN_ID` | `196` | 196 mainnet, 1952 testnet |
 | `CONTRACT_ADDRESS` | `0xC56d…530a` | deployed ProofDrop |
 | `PROCESSOR_ADDRESS` | `0x1f27…71a2` | eval processor used by the proof endpoint |
 | `CIRCUIT_ID` | `24` | TapeOut circuit |
 | `EXPLORER_URL` | `https://www.okx.com/web3/explorer/xlayer-test` | explorer base |
 | `PRIVATE_KEY` | `0x…` | orchestrator key (server-only) |
 | `PUBLIC_BASE_URL` | `https://proofdrop-api.fly.dev` | links |
-| `DEMO_MODE` | `true` | shows the testnet rehearsal banner |
+| `DEMO_MODE` | `false` | `true` shows the rehearsal banner on a testnet deployment |
 | `ADMIN_TOKEN` | random hex | enables the recovery import endpoint; omit to disable |
 
 `ADMIN_TOKEN` is not needed for the public flow. It powers `POST /admin/import`, an operational recovery tool that restores metadata/entries and refuses to commit if the rebuilt Merkle root does not match the on-chain root.
@@ -237,8 +237,10 @@ The Vite dev server proxies `/api` to `http://localhost:8090` when `VITE_API_URL
 
 ```bash
 VITE_API_URL=https://proofdrop-api.fly.dev \
-VITE_CHAIN_ID=1952 \
-VITE_CONTRACT_ADDRESS=0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a \
+VITE_CHAIN_ID=196 \
+VITE_CONTRACT_ADDRESS=0xc3cFf081656A338a84Ce80F4463aA69B375841D9 \
+VITE_RPC_URL=https://rpc.xlayer.tech \
+VITE_EXPLORER_URL=https://www.okx.com/web3/explorer/xlayer \
 pnpm build
 ```
 
@@ -266,45 +268,50 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 
 | Claim | Evidence |
 |---|---|
-| Prize escrow and settlement | `ProofDrop` on X Layer testnet: [`0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a`](https://www.okx.com/web3/explorer/xlayer-test/address/0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a) |
-| Draw #2 entrant root | `0xf502b58a94a6543bede59637252bf74b9dc67c8616a16556a98573de314018cf` |
-| Draw #2 seed | `0x70f9f4b87fbd8c3e09f3f82443e8b77816a529960fdec3ab615c70fca897c57f` |
-| Draw #2 winner | index `2` → `0xbb1cb30d674284be967eaa76e6e154111211ee33` |
-| Draw #2 settlement tx | [`0x479515ed827fa1e0aed145b6e88918da1454f3fd2ba396db3b75d85f04df41a8`](https://www.okx.com/web3/explorer/xlayer-test/tx/0x479515ed827fa1e0aed145b6e88918da1454f3fd2ba396db3b75d85f04df41a8) |
+| Prize escrow and settlement | `ProofDrop` on X Layer mainnet: [`0xc3cFf081656A338a84Ce80F4463aA69B375841D9`](https://www.okx.com/web3/explorer/xlayer/address/0xc3cFf081656A338a84Ce80F4463aA69B375841D9) |
+| Draw #1 entrant root | `0xf502b58a94a6543bede59637252bf74b9dc67c8616a16556a98573de314018cf` |
+| Draw #1 seed block | `74367126` |
+| Draw #1 seed | `0x2bf83a2dd7de1738eb994837f075d7b87ed6f28061e3b476b19590919da9165c` |
+| Draw #1 winner | index `1` → `0xd56256179ac09a8a07a82cc6e5cddb971842d8fc` |
+| Draw #1 create tx | [`0xfe7dce93b17fb999f1ebd665246ece08b0dbbbac05aaf7588cc2758ae4c377b9`](https://www.okx.com/web3/explorer/xlayer/tx/0xfe7dce93b17fb999f1ebd665246ece08b0dbbbac05aaf7588cc2758ae4c377b9) |
+| Draw #1 commit tx | [`0x1f04a33d9c113d64e7ed20595f595b8652ad91b1315e60fd24ffe91cd9861e76`](https://www.okx.com/web3/explorer/xlayer/tx/0x1f04a33d9c113d64e7ed20595f595b8652ad91b1315e60fd24ffe91cd9861e76) |
+| Draw #1 draw tx | [`0x12c56761ec2b4719e0b06b140ca7d29b5bd1346e582512786a7991a147e9d5a9`](https://www.okx.com/web3/explorer/xlayer/tx/0x12c56761ec2b4719e0b06b140ca7d29b5bd1346e582512786a7991a147e9d5a9) |
+| Draw #1 settlement tx | [`0x6f22a9c5670d9972372d97676769033b681c89571e8e9f9d90274b5a32d65fd3`](https://www.okx.com/web3/explorer/xlayer/tx/0x6f22a9c5670d9972372d97676769033b681c89571e8e9f9d90274b5a32d65fd3) |
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
-| Proof page | Public at https://proofdrop-1xx.pages.dev/d/2/proof |
-| Open live draw | #3 “The Long Weekend”, 0.005 OKB, 7-day window, 3 entries: https://proofdrop-1xx.pages.dev/d/3 |
+| Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
-### What is simulated in the live demo
+### What is real vs simulated
 
 | Claim | Status |
 |---|---|
-| TapeOut circuit evaluation on testnet | The testnet escrow points at `MockProcessor` (`0x1f27…71a2`), which implements the same `eval(uint256,bytes)` interface with deterministic output. This lets the escrow/draw/settle loop run before mainnet funds exist. The UI labels it `TESTNET REHEARSAL`. |
-| Mainnet circuit integration | Verified against a fork of X Layer mainnet: `forge test --match-contract ProofDropForkTest --fork-url https://rpc.xlayer.tech` calls the real processor `0x87BF…F9a6`, circuit `#24`, and measures ~1.36M gas for the four-round preview. The mainnet escrow deployment is ready but not funded at the time of writing. |
-| DeWEB hosting | The web build supports relative assets and hash routing; publishing to DeWEB requires a TapOut circuit/container on X Layer mainnet plus OKB for activation. The Cloudflare Pages build is the current live surface. This is a deployment step, not a code stub. |
-| Sybil resistance | One address per draw, signature verification, and off-chain abuse controls. This is not perfect sybil resistance; it is disclosed. |
+| Live path | Real: prize escrow, entry signatures, Merkle commitment, seed capture, circuit call, payout, and proof page are X Layer mainnet transactions. |
+| Circuit evaluation | Real TapeOut processor `0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6`, circuit `24`. Round 0 input `0x496a01` returns `0xb400`; round 3 input `0x66f501` returns `0x5c01`. |
+| Earlier testnet rehearsal | Historical only. It used `MockProcessor` `0x1f27…71a2` and testnet escrow `0xC56d…530a`; it is not the live app. |
+| DeWEB hosting | The static build supports relative assets and hash routing. Publishing to DeWEB requires a TapeOut circuit container and an activation fee on X Layer; Cloudflare Pages is the live surface today. |
+| Sybil resistance | One address per draw, signature verification, and off-chain abuse controls. Not perfect sybil resistance; disclosed. |
 | Block-producer neutrality | Not claimed. The list is committed before the seed block, but X Layer’s block producer could influence the hash. Disclosed on the proof page. |
 
 ### Reproduce the draw
 
 ```bash
 # 1. Read the committed draw
-cast call 0xC56d61dcb12dDA7dfA87e90776F5c665Bf7E530a \
+cast call 0xc3cFf081656A338a84Ce80F4463aA69B375841D9 \
   "getDraw(uint256)((address,address,address,uint256,uint64,uint64,uint32,uint32,uint32,uint8,bool,bool,bool,bytes32,bytes32))" \
-  2 --rpc-url https://testrpc.xlayer.tech/terigon
+  1 --rpc-url https://rpc.xlayer.tech
 
-# 2. Re-run the circuit for round 0 (mock processor on testnet)
-cast call 0x1f273c7743de768b33900a19cd8c003ca7eb71a2 \
-  "eval(uint256,bytes)(bytes)" 24 0x553d01 \
-  --rpc-url https://testrpc.xlayer.tech/terigon
-# -> 0x0002
-
-# 3. On mainnet, the same call against the live processor:
+# 2. Re-run the real circuit for round 0
 cast call 0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6 \
-  "eval(uint256,bytes)(bytes)" 24 0x000000 \
+  "eval(uint256,bytes)(bytes)" 24 0x496a01 \
   --rpc-url https://rpc.xlayer.tech
+# -> 0xb400
+
+# 3. Re-run round 3
+cast call 0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6 \
+  "eval(uint256,bytes)(bytes)" 24 0x66f501 \
+  --rpc-url https://rpc.xlayer.tech
+# -> 0x5c01
 ```
 
 The proof page publishes the four round inputs, outputs, 9-bit values, accumulator, winner index, Merkle proof, and settlement link.
@@ -359,7 +366,6 @@ A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). 
 - **Block-producer bias.** A block producer can influence the seed block. The list is committed first, which removes creator choice; it does not remove miner/sequencer influence.
 - **Processor implementation.** The TapeOut processor is an external contract; if its implementation is upgradeable, the `eval` behavior could change. The circuit ID and netlist are public, but high-value draws should pin and verify the processor implementation before escrow. The escrow treats the processor address as immutable.
 - **Off-chain list custody.** The public list lives in SQLite; the on-chain root is the source of truth. The recovery endpoint can rebuild the list only if the entries are supplied and the root matches. A lost list means the proof page cannot reconstruct the Merkle proof until restored.
-- **Testnet mock.** The live testnet demo uses a mock processor. The mainnet integration is fork-tested but not yet deployed.
 - **Prize promotion rules.** Entries are free. Do not use ProofDrop for paid-entry lotteries or regulated gambling without legal review.
 
 ---
@@ -372,7 +378,7 @@ A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). 
 | `contracts/test/ProofDropFork.t.sol` | Real TapeOut circuit call on an X Layer mainnet fork; gas measurement |
 | `apps/api/src/merkle.rs` tests | Index-bound Merkle construction and proof verification |
 | `pnpm --dir apps/web build` | TypeScript strict build, static asset generation |
-| Manual E2E | Create → 3 signed entries → commit → capture → draw → settle → proof replay on X Layer testnet |
+| Manual E2E | Create → 3 signed entries → commit → capture → draw → settle → proof replay on X Layer mainnet |
 
 Run everything:
 
@@ -388,7 +394,7 @@ pnpm --dir apps/web build
 
 ### Current limitations
 
-- Testnet live demo uses `MockProcessor`; mainnet escrow deployment awaits a small OKB gas budget.
+- One settled mainnet draw at submission time; there is no open mainnet draw in the live app, so the landing features the last proof.
 - Wallet-only entry (no X-handle entry or social login yet).
 - One winner per draw; no multi-winner or NFT prize support.
 - SQLite is appropriate for a single-instance demo, not a multi-region production service.
@@ -397,7 +403,7 @@ pnpm --dir apps/web build
 
 ### Next steps
 
-1. Deploy the escrow to X Layer mainnet with the live circuit; publish the same draw flow.
+1. Run recurring mainnet draws and keep one open for the submission window.
 2. Tape out a dedicated draw circuit (16-bit xorshift + rejection) and publish its processor address and circuit ID.
 3. Publish the static proof app to DeWEB; mirror the build on Cloudflare Pages for reliability.
 4. Add X-handle + wallet entry with Turnstile and a signed entry receipt.
