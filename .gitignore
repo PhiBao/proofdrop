@@ -18,3 +18,7 @@ contracts/lib/
 .wrangler/
 __pycache__/
 apps/api/target/
+
+# Private agent instructions (kept outside the repository)
+AGENTS.md
+FOUNDER.md
