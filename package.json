@@ -11,10 +11,5 @@
     "contracts:test": "forge test --root contracts -vvv",
     "api:dev": "cargo run --manifest-path apps/api/Cargo.toml",
     "api:test": "cargo test --manifest-path apps/api/Cargo.toml"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
   }
 }
