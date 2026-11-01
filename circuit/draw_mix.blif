@@ -1,0 +1,274 @@
+# ProofDrop draw mixer
+# 17 inputs, 9 outputs, NAND-only, combinational.
+# s = (x XOR 1); s ^= s << 7; s ^= s >> 9; s ^= s << 3; y = s[8:0]
+# The full 17-bit map is a permutation, so the 9-bit output is uniform.
+.model proofdrop_draw_mix
+.inputs x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 x10 x11 x12 x13 x14 x15 x16
+.outputs y0 y1 y2 y3 y4 y5 y6 y7 y8
+
+.names x0 x0n
+0 1
+.names x7 x0n n0
+11 0
+.names x7 n0 n1
+11 0
+.names x0n n0 n2
+11 0
+.names n1 n2 a7
+11 0
+.names x8 x1 n3
+11 0
+.names x8 n3 n4
+11 0
+.names x1 n3 n5
+11 0
+.names n4 n5 a8
+11 0
+.names x9 x2 n6
+11 0
+.names x9 n6 n7
+11 0
+.names x2 n6 n8
+11 0
+.names n7 n8 a9
+11 0
+.names x10 x3 n9
+11 0
+.names x10 n9 n10
+11 0
+.names x3 n9 n11
+11 0
+.names n10 n11 a10
+11 0
+.names x11 x4 n12
+11 0
+.names x11 n12 n13
+11 0
+.names x4 n12 n14
+11 0
+.names n13 n14 a11
+11 0
+.names x12 x5 n15
+11 0
+.names x12 n15 n16
+11 0
+.names x5 n15 n17
+11 0
+.names n16 n17 a12
+11 0
+.names x13 x6 n18
+11 0
+.names x13 n18 n19
+11 0
+.names x6 n18 n20
+11 0
+.names n19 n20 a13
+11 0
+.names x14 x7 n21
+11 0
+.names x14 n21 n22
+11 0
+.names x7 n21 n23
+11 0
+.names n22 n23 a14
+11 0
+.names x15 x8 n24
+11 0
+.names x15 n24 n25
+11 0
+.names x8 n24 n26
+11 0
+.names n25 n26 a15
+11 0
+.names x16 x9 n27
+11 0
+.names x16 n27 n28
+11 0
+.names x9 n27 n29
+11 0
+.names n28 n29 a16
+11 0
+.names x0n a9 n30
+11 0
+.names x0n n30 n31
+11 0
+.names a9 n30 n32
+11 0
+.names n31 n32 b0
+11 0
+.names x1 a10 n33
+11 0
+.names x1 n33 n34
+11 0
+.names a10 n33 n35
+11 0
+.names n34 n35 b1
+11 0
+.names x2 a11 n36
+11 0
+.names x2 n36 n37
+11 0
+.names a11 n36 n38
+11 0
+.names n37 n38 b2
+11 0
+.names x3 a12 n39
+11 0
+.names x3 n39 n40
+11 0
+.names a12 n39 n41
+11 0
+.names n40 n41 b3
+11 0
+.names x4 a13 n42
+11 0
+.names x4 n42 n43
+11 0
+.names a13 n42 n44
+11 0
+.names n43 n44 b4
+11 0
+.names x5 a14 n45
+11 0
+.names x5 n45 n46
+11 0
+.names a14 n45 n47
+11 0
+.names n46 n47 b5
+11 0
+.names x6 a15 n48
+11 0
+.names x6 n48 n49
+11 0
+.names a15 n48 n50
+11 0
+.names n49 n50 b6
+11 0
+.names a7 a16 n51
+11 0
+.names a7 n51 n52
+11 0
+.names a16 n51 n53
+11 0
+.names n52 n53 b7
+11 0
+.names b3 b0 n54
+11 0
+.names b3 n54 n55
+11 0
+.names b0 n54 n56
+11 0
+.names n55 n56 y3
+11 0
+.names b4 b1 n57
+11 0
+.names b4 n57 n58
+11 0
+.names b1 n57 n59
+11 0
+.names n58 n59 y4
+11 0
+.names b5 b2 n60
+11 0
+.names b5 n60 n61
+11 0
+.names b2 n60 n62
+11 0
+.names n61 n62 y5
+11 0
+.names b6 b3 n63
+11 0
+.names b6 n63 n64
+11 0
+.names b3 n63 n65
+11 0
+.names n64 n65 y6
+11 0
+.names b7 b4 n66
+11 0
+.names b7 n66 n67
+11 0
+.names b4 n66 n68
+11 0
+.names n67 n68 y7
+11 0
+.names a8 b5 n69
+11 0
+.names a8 n69 n70
+11 0
+.names b5 n69 n71
+11 0
+.names n70 n71 y8
+11 0
+.names a9 b6 n72
+11 0
+.names a9 n72 n73
+11 0
+.names b6 n72 n74
+11 0
+.names n73 n74 c9
+11 0
+.names a10 b7 n75
+11 0
+.names a10 n75 n76
+11 0
+.names b7 n75 n77
+11 0
+.names n76 n77 c10
+11 0
+.names a11 a8 n78
+11 0
+.names a11 n78 n79
+11 0
+.names a8 n78 n80
+11 0
+.names n79 n80 c11
+11 0
+.names a12 a9 n81
+11 0
+.names a12 n81 n82
+11 0
+.names a9 n81 n83
+11 0
+.names n82 n83 c12
+11 0
+.names a13 a10 n84
+11 0
+.names a13 n84 n85
+11 0
+.names a10 n84 n86
+11 0
+.names n85 n86 c13
+11 0
+.names a14 a11 n87
+11 0
+.names a14 n87 n88
+11 0
+.names a11 n87 n89
+11 0
+.names n88 n89 c14
+11 0
+.names a15 a12 n90
+11 0
+.names a15 n90 n91
+11 0
+.names a12 n90 n92
+11 0
+.names n91 n92 c15
+11 0
+.names a16 a13 n93
+11 0
+.names a16 n93 n94
+11 0
+.names a13 n93 n95
+11 0
+.names n94 n95 c16
+11 0
+.names b0 y0
+1 1
+.names b1 y1
+1 1
+.names b2 y2
+1 1
+
+.end

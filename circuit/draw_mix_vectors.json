@@ -1,0 +1,106 @@
+[
+  {
+    "label": "zero",
+    "input": "0x00000",
+    "input_bits_lsb_first": "00000000000000000",
+    "state_17": "0x00489",
+    "output_9": "0x089",
+    "output_bits_lsb_first": "100100010"
+  },
+  {
+    "label": "bit 0 set",
+    "input": "0x00001",
+    "input_bits_lsb_first": "10000000000000000",
+    "state_17": "0x00000",
+    "output_9": "0x000",
+    "output_bits_lsb_first": "000000000"
+  },
+  {
+    "label": "bit 1 set",
+    "input": "0x00002",
+    "input_bits_lsb_first": "01000000000000000",
+    "state_17": "0x00d9b",
+    "output_9": "0x19b",
+    "output_bits_lsb_first": "110110011"
+  },
+  {
+    "label": "low bits",
+    "input": "0x00007",
+    "input_bits_lsb_first": "11100000000000000",
+    "state_17": "0x01b3f",
+    "output_9": "0x13f",
+    "output_bits_lsb_first": "111111001"
+  },
+  {
+    "label": "low byte",
+    "input": "0x000ff",
+    "input_bits_lsb_first": "11111111000000000",
+    "state_17": "0x181c9",
+    "output_9": "0x1c9",
+    "output_bits_lsb_first": "100100111"
+  },
+  {
+    "label": "bit 8",
+    "input": "0x00100",
+    "input_bits_lsb_first": "00000000100000000",
+    "state_17": "0x08fc9",
+    "output_9": "0x1c9",
+    "output_bits_lsb_first": "100100111"
+  },
+  {
+    "label": "mixed",
+    "input": "0x01234",
+    "input_bits_lsb_first": "00101100010010000",
+    "state_17": "0x149b9",
+    "output_9": "0x1b9",
+    "output_bits_lsb_first": "100111011"
+  },
+  {
+    "label": "low 15 bits",
+    "input": "0x07fff",
+    "input_bits_lsb_first": "11111111111111100",
+    "state_17": "0x181ce",
+    "output_9": "0x1ce",
+    "output_bits_lsb_first": "011100111"
+  },
+  {
+    "label": "alternating",
+    "input": "0x0aaaa",
+    "input_bits_lsb_first": "01010101010101010",
+    "state_17": "0x00174",
+    "output_9": "0x174",
+    "output_bits_lsb_first": "001011101"
+  },
+  {
+    "label": "bit 16",
+    "input": "0x10000",
+    "input_bits_lsb_first": "00000000000000001",
+    "state_17": "0x10009",
+    "output_9": "0x009",
+    "output_bits_lsb_first": "100100000"
+  },
+  {
+    "label": "mixed",
+    "input": "0x12345",
+    "input_bits_lsb_first": "10100010110001001",
+    "state_17": "0x08924",
+    "output_9": "0x124",
+    "output_bits_lsb_first": "001001001"
+  },
+  {
+    "label": "alternating",
+    "input": "0x15555",
+    "input_bits_lsb_first": "10101010101010101",
+    "state_17": "0x002f3",
+    "output_9": "0x0f3",
+    "output_bits_lsb_first": "110011110"
+  },
+  {
+    "label": "all ones",
+    "input": "0x1ffff",
+    "input_bits_lsb_first": "11111111111111111",
+    "state_17": "0x0070e",
+    "output_9": "0x10e",
+    "output_bits_lsb_first": "011100001"
+  }
+]
