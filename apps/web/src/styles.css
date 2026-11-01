@@ -2447,3 +2447,31 @@ code {
   word-break: break-all;
   overflow-wrap: anywhere;
 }
+
+.tapeout-callout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid var(--orange);
+  background: rgba(255, 77, 0, 0.04);
+  padding: 12px 14px;
+  margin: 18px 0;
+}
+
+.tapeout-callout .mono-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--orange);
+}
+
+.tapeout-callout code {
+  font-size: 0.78rem;
+}
+
+@media (max-width: 560px) {
+  .tapeout-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

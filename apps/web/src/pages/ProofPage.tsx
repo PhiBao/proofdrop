@@ -115,6 +115,22 @@ export function ProofPage() {
           Each round derives a 17-bit input from the seed and calls circuit #{proof.circuit.circuitId}.
           The first two output bytes are read as a 9-bit value.
         </p>
+        <div className="tapeout-callout">
+          <div>
+            <span className="mono-label">LIVE TAPEOUT CALL</span>
+            <code>
+              eval({proof.circuit.circuitId}, {proof.rounds[0]?.input ?? '0x…'}) → {proof.rounds[0]?.output ?? '0x…'}
+            </code>
+          </div>
+          <a
+            href={`${explorer}/address/${proof.circuit.processor}`}
+            target="_blank"
+            rel="noreferrer"
+            className="mono text-link"
+          >
+            processor ↗
+          </a>
+        </div>
         <div className="round-table">
           <div className="round-table-head mono">
             <span>ROUND</span>
