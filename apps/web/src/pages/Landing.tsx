@@ -51,6 +51,9 @@ export function Landing() {
               Browse draws
             </Link>
           </div>
+          <Link to="/demo" className="text-link hero-demo-link">
+            Watch the 100-second demo →
+          </Link>
           <div className="hero-facts">
             <span><strong>{stats.data?.draws ?? '—'}</strong> {drawLabel}</span>
             <span><strong>{stats.data?.entries ?? '—'}</strong> {entryLabel}</span>
@@ -269,7 +272,10 @@ export function Landing() {
         <span className="eyebrow mono">FOR CREATORS</span>
         <h2>Your audience deserves<br />a receipt.</h2>
         <p>Flat fee, escrowed prize, and a proof page every entrant can share. Built to run weekly.</p>
-        <Link to="/create" className="btn btn-orange btn-lg">Start a draw →</Link>
+        <div className="closing-actions">
+          <Link to="/create" className="btn btn-orange btn-lg">Start a draw →</Link>
+          <Link to="/demo" className="btn btn-outline btn-lg">Watch the demo</Link>
+        </div>
       </section>
     </div>
   )

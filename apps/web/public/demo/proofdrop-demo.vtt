@@ -1,0 +1,89 @@
+WEBVTT
+
+00:00.050 --> 00:01.714
+A creator runs a giveaway.
+
+00:01.714 --> 00:06.820
+The prize is real, the audience is real, and the winner is a
+screenshot.
+
+00:06.820 --> 00:10.691
+When someone asks how the winner was picked, there is nothing to
+check.
+
+00:10.691 --> 00:13.085
+ProofDrop makes that answer checkable.
+
+00:13.700 --> 00:15.378
+This is the live product.
+
+00:15.378 --> 00:21.268
+The prize is already escrowed on X Layer, and the open draw runs for
+thirty days.
+
+00:21.268 --> 00:24.368
+The contract holds the money, not ProofDrop.
+
+00:24.980 --> 00:28.147
+A creator writes the terms and sets the prize.
+
+00:28.147 --> 00:31.472
+The fee is one percent, shown before signing.
+
+00:32.449 --> 00:35.551
+One signature moves the prize into escrow.
+
+00:35.551 --> 00:38.635
+This is the actual transaction on X Layer.
+
+00:39.239 --> 00:42.220
+Here, a demo wallet enters the open draw.
+
+00:42.220 --> 00:43.976
+It signs one message.
+
+00:43.976 --> 00:46.250
+No gas, no ticket price.
+
+00:46.250 --> 00:53.085
+One address, one entry, and the signature is tied to this draw, this
+contract, and this chain.
+
+00:55.019 --> 00:59.411
+When entries close, the list is hashed and committed on-chain.
+
+00:59.411 --> 01:02.469
+The same transaction fixes a future block.
+
+01:03.079 --> 01:10.716
+The contract reads that block hash, calls its own circuit four times,
+and turns the output into a winner index.
+
+01:12.659 --> 01:19.843
+The page prints the entrant root, the Merkle proof, and the command to
+replay it on any X Layer RPC.
+
+01:19.843 --> 01:22.170
+The settlement is on X Layer too.
+
+01:23.939 --> 01:29.740
+The same page is stored on X Layer through DeWEB, so the receipt does
+not depend on this app.
+
+01:30.369 --> 01:32.619
+Creators pay one percent per draw.
+
+01:32.619 --> 01:34.015
+Entrants pay nothing.
+
+01:34.015 --> 01:36.462
+Every draw leaves a public receipt.
+
+01:36.462 --> 01:37.406
+ProofDrop.
+
+01:37.406 --> 01:38.763
+Don't trust the draw.
+
+01:38.763 --> 01:39.733
+Replay it.

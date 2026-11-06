@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 
 import { ConnectButton } from './ConnectButton'
 import { Logo } from './Logo'
@@ -8,6 +8,7 @@ const nav = [
   { to: '/explore', label: 'Explore' },
   { to: '/create', label: 'Start a draw' },
   { to: '/how-it-works', label: 'How it works' },
+  { to: '/demo', label: 'Demo' },
 ]
 
 export function Layout() {
@@ -58,6 +59,7 @@ export function Layout() {
           <div>
             <span className="mono-label">PROOF</span>
             <a href="https://1-2-413.tapekit.org" target="_blank" rel="noreferrer">DeWEB proof ↗</a>
+            <Link to="/demo">Demo</Link>
             <a href="https://github.com/PhiBao/proofdrop" target="_blank" rel="noreferrer">Source ↗</a>
           </div>
         </div>

@@ -6,6 +6,7 @@ ProofDrop is a verifiable giveaway protocol for creators. A creator escrows a pr
 
 - **Live app:** https://proofdrop-1xx.pages.dev
 - **API:** https://proofdrop-api.fly.dev
+- **Demo video:** https://proofdrop-1xx.pages.dev/demo (100 seconds, captions)
 - **Demo proof:** https://proofdrop-1xx.pages.dev/d/1/proof
 - **Network:** X Layer mainnet (chain 196). The live draw is settled on mainnet and calls the real TapeOut circuit; see [Verification](#verification).
 - **Source:** https://github.com/PhiBao/proofdrop
@@ -281,11 +282,12 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Draw #1 settlement tx | [`0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f`](https://www.okx.com/web3/explorer/xlayer/tx/0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f) |
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
+| Demo video | 100 seconds, 1920×1080, captions: https://proofdrop-1xx.pages.dev/demo |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
 | Proof survival | The proof page ships with a static JSON fallback at `/proofs/1.json` and a DeWEB copy at https://1-2-413.tapekit.org. |
 | DeWEB proof | Name `1.2.413.tape`, container `0xa5bfe431…535c`, one file `index.html` (11,137 bytes, sha256 `0x1e3c…de0d`). `isLive` and `isContainerLive` return true. |
 | DeWEB transactions | [open](https://www.okx.com/web3/explorer/xlayer/tx/0x9470d6c5d57b5ed801191ee4329a2ead960876690f77884ee1cb965e6c7ea541) · [publish](https://www.okx.com/web3/explorer/xlayer/tx/0xe947a006c51c4f5fcdd63197e1b3f3cd00072952f787e756bce21be682bc29c1) · [bind](https://www.okx.com/web3/explorer/xlayer/tx/0x6f26821a4aa02a51f5a27f10100d6063c2b49a19491d5d174c790f4cf37f2835) |
-| Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 3 entries: https://proofdrop-1xx.pages.dev/d/2 |
+| Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 4 entries (3 seeded, 1 demo): https://proofdrop-1xx.pages.dev/d/2 |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
 ### What is real vs simulated
@@ -325,16 +327,21 @@ The proof page publishes the four round inputs, outputs, 9-bit values, accumulat
 
 ---
 
-## Demo flow (3 minutes)
+## Demo (100 seconds)
 
-1. **Hook (0:00–0:20).** “A creator was accused of rigging a giveaway. A screenshot cannot prove otherwise.”
-2. **Create + escrow (0:20–0:50).** Open `/create`, enter a prize, sign `createDraw`, show the escrow transaction on OKX Explorer.
-3. **Enter (0:50–1:20).** Open the draw link on a phone, connect OKX Wallet, sign a free entry. Show the public entrant list.
-4. **Lock + draw (1:20–1:50).** Close entries, lock the list, run the draw. The contract captures the seed block, calls circuit #1, and settles the winner.
-5. **The moment (1:50–2:20).** Open the proof page. Replay the four circuit rounds; show the same winner index and the settlement transaction.
-6. **Business + close (2:20–3:00).** 1% fee, recurring creator drops, DeWEB proof page. “Don’t trust the draw. Replay it.”
+The recorded walkthrough is at https://proofdrop-1xx.pages.dev/demo. It runs 100 seconds at 1920×1080 with English captions:
 
-A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). The full shot list is in [`docs/demo-script.md`](docs/demo-script.md); paste-ready submission copy is in [`docs/submission.md`](docs/submission.md).
+1. **The problem (0:00).** A screenshot is not a receipt.
+2. **The live draw (0:13).** The open draw and its escrow.
+3. **Create + escrow (0:24).** The form, the 1% fee, and the actual X Layer transaction.
+4. **Free entry (0:39).** A demo wallet signs one message and appears in the public list as entry #3.
+5. **Lock + seed (0:55).** Draw #1's committed list and captured block.
+6. **Circuit decision (1:03).** Four real `eval` rounds and the 36-bit accumulator.
+7. **The receipt (1:12).** The Merkle proof and the replay command.
+8. **DeWEB copy (1:24).** The proof page served from X Layer.
+9. **Close (1:30).** The fee, the receipt, and the thesis.
+
+The full shot list is in [`docs/demo-script.md`](docs/demo-script.md); paste-ready submission copy is in [`docs/submission.md`](docs/submission.md).
 
 ---
 

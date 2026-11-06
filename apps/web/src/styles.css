@@ -2485,3 +2485,159 @@ code {
 .entry-actions .entry-handle input {
   padding: 10px 12px;
 }
+
+/* ---------- demo ---------- */
+
+.hero-demo-link {
+  display: inline-block;
+  margin-top: 18px;
+  font-size: 0.82rem;
+}
+
+.closing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.demo-page {
+  padding-bottom: 64px;
+}
+
+.demo-frame {
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  padding: 8px;
+}
+
+.demo-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.demo-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 48px;
+  margin-top: 38px;
+}
+
+.compact-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: none;
+  margin-bottom: 8px;
+}
+
+.compact-head .eyebrow {
+  font-size: 0.62rem;
+}
+
+.demo-chapters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+}
+
+.demo-chapter {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: none;
+  text-align: left;
+}
+
+.demo-chapter:hover {
+  color: var(--orange);
+}
+
+.demo-chapter .t {
+  width: 38px;
+  flex: none;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  color: var(--orange);
+}
+
+.demo-chapter .l {
+  font-size: 0.9rem;
+}
+
+.demo-aside {
+  border-left: 1px solid var(--line);
+  padding-left: 34px;
+}
+
+.demo-aside p {
+  margin: 12px 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.demo-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.demo-links .text-link {
+  font-size: 0.82rem;
+}
+
+.demo-note {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 0.62rem;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 900px) {
+  .demo-grid {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .demo-aside {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-left: 0;
+    padding-top: 26px;
+  }
+}
+
+@media (max-width: 620px) {
+  .demo-chapters {
+    grid-template-columns: 1fr;
+  }
+
+  .demo-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

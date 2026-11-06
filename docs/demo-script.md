@@ -1,11 +1,13 @@
-# Demo script — 3 minutes
+# Demo script
+
+> The recorded demo is the 100-second cut at https://proofdrop-1xx.pages.dev/demo. This page keeps the longer three-minute shot list for a live walkthrough.
 
 ## Preconditions
 
 - The live app is on X Layer mainnet: https://proofdrop-1xx.pages.dev
 - The settled proof is at: https://proofdrop-1xx.pages.dev/d/1/proof
 - The mainnet draw #1, “First Silicon,” is settled: winner `0x2516…d628`, settlement tx `0x95f2…d46f`.
-- The open judge draw is #2, “The Open Draw,” at https://proofdrop-1xx.pages.dev/d/2: 0.002 OKB, 30-day window, 3 seeded entries.
+- The open judge draw is #2, “The Open Draw,” at https://proofdrop-1xx.pages.dev/d/2: 0.002 OKB, 30-day window, 4 entries (3 seeded, 1 demo).
 - The DeWEB copy of draw #1 is live at https://1-2-413.tapekit.org.
 - Optional: if you create a new mainnet draw during the recording, use a small prize and keep the explorer tab open. Do not stage a fake draw.
 

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 import { Layout } from './components/Layout'
 import { Create } from './pages/Create'
+import { DemoPage } from './pages/DemoPage'
 import { DrawPage } from './pages/DrawPage'
 import { Explore } from './pages/Explore'
 import { HowItWorks } from './pages/HowItWorks'
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="explore" element={<Explore />} />
           <Route path="create" element={<Create />} />
           <Route path="how-it-works" element={<HowItWorks />} />
+          <Route path="demo" element={<DemoPage />} />
           <Route path="d/:id" element={<DrawPage />} />
           <Route path="d/:id/proof" element={<ProofPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
