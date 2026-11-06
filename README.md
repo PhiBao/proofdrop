@@ -378,6 +378,7 @@ The next stage is an anonymous proof-of-personhood check at entry, using Very’
 
 - **Block-producer bias.** A block producer can influence the seed block. The list is committed first, which removes creator choice; it does not remove miner/sequencer influence.
 - **Processor implementation.** The processor is registered with the X Layer TapeOut factory, but the factory is unsealed at the time of writing. The processor/circuit implementation should be treated as upgradeable until sealed. The circuit netlist, processor address, and eval results are public; high-value draws should pin and verify the implementation before escrow.
+- **Committer liveness and censorship.** The live escrow allows one designated committer to submit the entrant root. If that key refuses or disappears, the draw cannot proceed until the 30-day refund path. A future version can make commitment permissionless against the published entry count and root.
 - **Off-chain list custody.** The public list lives in SQLite; the on-chain root is the source of truth. The recovery endpoint can rebuild the list only if the entries are supplied and the root matches. A lost list means the proof page cannot reconstruct the Merkle proof until restored.
 - **Prize promotion rules.** Entries are free. Do not use ProofDrop for paid-entry lotteries or regulated gambling without legal review.
 
