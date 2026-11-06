@@ -177,7 +177,7 @@ export PRIVATE_KEY=0x...
 export DEPLOY_MOCK=true
 export CIRCUIT_ID=1
 export FEE_BPS=100
-export MIN_FEE=1000000000000000
+export MIN_FEE=100000000000000
 export ROUNDS=4
 forge script script/Deploy.s.sol \
   --rpc-url https://testrpc.xlayer.tech/terigon --broadcast

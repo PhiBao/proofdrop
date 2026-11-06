@@ -226,7 +226,7 @@ export function Create() {
             <div><span>Prize escrow</span><strong>{okb(prizeWei)} OKB</strong></div>
             <div><span>Protocol fee</span><strong>{okb(fee)} OKB</strong></div>
             <div className="fee-total"><span>You pay</span><strong>{okb(total)} OKB</strong></div>
-            <p className="mono">Fee is {config.data ? (config.data.feeBps / 100).toFixed(2) : '1.00'}% with a {config.data ? okb(config.data.minFee) : '0.001'} OKB minimum.</p>
+            <p className="mono">Fee is {config.data ? (config.data.feeBps / 100).toFixed(2) : '1.00'}% with a {config.data ? okb(config.data.minFee) : '0.0001'} OKB minimum.</p>
           </div>
 
           <div className="create-submit">

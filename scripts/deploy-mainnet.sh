@@ -26,7 +26,7 @@ export PRIVATE_KEY="$DEPLOYER_PRIVATE_KEY"
 export PROCESSOR="$PROCESSOR"
 export CIRCUIT_ID="$CIRCUIT_ID"
 export FEE_BPS="${FEE_BPS:-100}"
-export MIN_FEE="${MIN_FEE:-1000000000000000}"
+export MIN_FEE="${MIN_FEE:-100000000000000}"
 export ROUNDS="${ROUNDS:-4}"
 
 forge script script/Deploy.s.sol --rpc-url "$RPC" --broadcast

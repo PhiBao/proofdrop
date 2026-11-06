@@ -12,7 +12,7 @@ contract Deploy is Script {
         address processor = vm.envOr("PROCESSOR", address(0));
         uint256 circuitId = vm.envOr("CIRCUIT_ID", uint256(24));
         uint16 feeBps = uint16(vm.envOr("FEE_BPS", uint256(100)));
-        uint256 minFee = vm.envOr("MIN_FEE", uint256(0.001 ether));
+        uint256 minFee = vm.envOr("MIN_FEE", uint256(0.0001 ether));
         address treasury = vm.envOr("TREASURY", vm.addr(pk));
         uint8 rounds = uint8(vm.envOr("ROUNDS", uint256(4)));
 

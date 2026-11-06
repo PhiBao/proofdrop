@@ -182,7 +182,7 @@ winnerIndex = accumulator % entryCount`}</pre>
         <details>
           <summary>How does ProofDrop make money?</summary>
           <p>
-            A 1% protocol fee on the prize, minimum 0.001 OKB, charged at escrow. Entrants
+            A 1% protocol fee on the prize, minimum 0.0001 OKB, charged at escrow. Entrants
             pay nothing. The fee is visible before the creator signs and is sent to the
             treasury in the same transaction.
           </p>

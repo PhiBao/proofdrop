@@ -25,7 +25,7 @@ ProofDrop is a verifiable giveaway protocol for creators. A creator escrows the 
 
 ## Revenue model
 
-1% of the prize, minimum 0.001 OKB, charged at escrow and sent to the treasury in the creation transaction. Entrants pay nothing. Recurring weekly drops create recurring fees. The model is visible before the creator signs; there is no paid entry and no token.
+1% of the prize, minimum 0.0001 OKB, charged at escrow and sent to the treasury in the creation transaction. Entrants pay nothing. Recurring weekly drops create recurring fees. The model is visible before the creator signs; there is no paid entry and no token.
 
 ## Track / direction
 
