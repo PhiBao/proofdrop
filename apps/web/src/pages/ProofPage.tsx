@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useParams } from 'react-router-dom'
 
-import { api } from '../api'
+import { api, type Proof } from '../api'
 import { shortAddress, shortHash, okb, formatDate } from '../lib/format'
 
 export function ProofPage() {
@@ -11,7 +11,17 @@ export function ProofPage() {
   const config = useQuery({ queryKey: ['config'], queryFn: api.getConfig })
   const proofQuery = useQuery({
     queryKey: ['proof', id],
-    queryFn: () => api.getProof(id),
+    queryFn: async (): Promise<Proof> => {
+      try {
+        return await api.getProof(id)
+      } catch (apiError) {
+        // The permanent copy travels with the static site. If the API is
+        // unreachable, render the archived proof instead of losing the receipt.
+        const res = await fetch(`${import.meta.env.BASE_URL}proofs/${id}.json`)
+        if (!res.ok) throw apiError
+        return (await res.json()) as Proof
+      }
+    },
     enabled: Number.isFinite(id),
   })
   const [copied, setCopied] = useState(false)

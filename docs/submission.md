@@ -46,6 +46,7 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - App: https://proofdrop-1xx.pages.dev
 - API: https://proofdrop-api.fly.dev
 - Proof: https://proofdrop-1xx.pages.dev/d/1/proof
+- Open draw: https://proofdrop-1xx.pages.dev/d/2
 - Mainnet escrow: `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb`
 - Processor: “ProofDrop Draw,” 10,000 transistor supply; circuit #1 burned 403 NAND.
 - Tape-out tx: `0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca`
@@ -63,7 +64,7 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - Block-producer neutrality.
 - An independent audit.
 - DeWEB is live for this build; the static build is DeWEB-ready and the current live surface is Cloudflare Pages.
-- There is one settled mainnet draw at submission time (0.001 OKB prize); there is no open mainnet draw in the live app.
+- There is one settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB) at submission time.
 
 ## Links
 

@@ -24,7 +24,7 @@ export function Landing() {
 
   const drawLabel = stats.data?.draws === 1 ? 'draw' : 'draws'
   const entryLabel = stats.data?.entries === 1 ? 'entry' : 'entries'
-  const circuitId = config.data?.circuitId ?? '24'
+  const circuitId = config.data?.circuitId ?? '1'
   const processor = config.data?.processor ?? '0x87bf…'
 
   return (
@@ -188,7 +188,7 @@ export function Landing() {
           </p>
           <p className="mono circuit-note">
             processor {processor}<br />
-            circuit #{circuitId} · eval(circuitId, bytes) · 140 gates per round
+            circuit #{circuitId} · eval(circuitId, bytes) · 403 gates per eval
           </p>
           {config.data?.demoMode && (
             <p className="mono warn-text">
@@ -231,7 +231,7 @@ export function Landing() {
           ) : (
             <>
               <div className="mono-label">SEED → CIRCUIT → INDEX</div>
-              <CircuitDiagram />
+              <CircuitDiagram circuitId={circuitId} />
               <div className="circuit-hash mono">
                 The first settled draw will publish its replay here.
               </div>
@@ -285,7 +285,7 @@ function CircuitMotif() {
   )
 }
 
-function CircuitDiagram() {
+function CircuitDiagram({ circuitId }: { circuitId: string }) {
   return (
     <div className="circuit-diagram" aria-hidden="true">
       <div className="diagram-node">
@@ -294,13 +294,13 @@ function CircuitDiagram() {
       </div>
       <span className="diagram-arrow">→</span>
       <div className="diagram-chip">
-        <span className="mono-label">CIRCUIT #{'24'}</span>
+        <span className="mono-label">CIRCUIT #{circuitId}</span>
         <div className="chip-gates">
           {Array.from({ length: 24 }).map((_, i) => (
             <i key={i} className={i % 4 === 0 ? 'gate on' : 'gate'} />
           ))}
         </div>
-        <span className="mono">NAND / LATCH</span>
+        <span className="mono">NAND ONLY</span>
       </div>
       <span className="diagram-arrow">→</span>
       <div className="diagram-node">

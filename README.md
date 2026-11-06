@@ -282,6 +282,7 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
+| Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 3 entries: https://proofdrop-1xx.pages.dev/d/2 |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
 ### What is real vs simulated
@@ -397,7 +398,7 @@ pnpm --dir apps/web build
 
 ### Current limitations
 
-- One settled mainnet draw at submission time; there is no open mainnet draw in the live app, so the landing features the last proof.
+- One settled custom-circuit draw plus one open 30-day draw at submission time; the landing features the open draw.
 - Wallet-only entry (no X-handle entry or social login yet).
 - One winner per draw; no multi-winner or NFT prize support.
 - SQLite is appropriate for a single-instance demo, not a multi-region production service.

@@ -26,6 +26,7 @@ export function DrawPage() {
   const { signMessageAsync } = useSignMessage()
   const { writeContractAsync } = useWriteContract()
   const [claimHash, setClaimHash] = useState<`0x${string}` | undefined>()
+  const [handle, setHandle] = useState('')
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -77,7 +78,12 @@ export function DrawPage() {
       if (chainId !== activeChain.id) throw new Error(`Switch to ${activeChain.name} first`)
       const signed = entryMessage(id, address)
       const signature = await signMessageAsync({ message: signed })
-      return api.enter(id, { address, signature, message: signed })
+      return api.enter(id, {
+        address,
+        signature,
+        message: signed,
+        handle: handle.trim() || undefined,
+      })
     },
     onSuccess: () => {
       setError(null)
@@ -265,6 +271,15 @@ export function DrawPage() {
                 </p>
                 {isConnected ? (
                   <div className="entry-actions">
+                    <label className="field entry-handle">
+                      <span>Display handle (optional)</span>
+                      <input
+                        value={handle}
+                        onChange={(e) => setHandle(e.target.value)}
+                        placeholder="@yourhandle"
+                        maxLength={50}
+                      />
+                    </label>
                     <button
                       className="btn btn-solid btn-lg"
                       disabled={enter.isPending || chainId !== activeChain.id}

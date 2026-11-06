@@ -2475,3 +2475,13 @@ code {
     align-items: flex-start;
   }
 }
+
+.entry-actions .entry-handle {
+  flex: 1;
+  min-width: 220px;
+  margin: 0;
+}
+
+.entry-actions .entry-handle input {
+  padding: 10px 12px;
+}
