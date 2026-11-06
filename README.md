@@ -126,7 +126,7 @@ ProofDrop Draw processor + circuit #1 (X Layer mainnet)
 | Escrow | Solidity 0.8.28, Foundry | Custody, commitment, seed capture, circuit call, Merkle settlement, refunds. |
 | Circuit | ProofDrop Draw processor, circuit #1 | Dedicated 403-NAND, 17-in / 9-out draw mixer. |
 | Database | SQLite (WAL) | Public entrant list, draw metadata, settlement tx hash. |
-| Hosting | Cloudflare Pages (web), Fly.io (API) | Public demo; no server-side key handling in the browser. |
+| Hosting | Cloudflare Pages (web), Fly.io (API) | Public demo; the API suspends when idle and resumes in about a second. No server-side key handling in the browser. |
 
 ### Trust boundaries
 
@@ -206,6 +206,8 @@ cd apps/api
 cp .env.example .env       # fill in values
 cargo run
 ```
+
+Production runs on Fly.io with `auto_stop_machines = "suspend"` and `min_machines_running = 0`. An idle machine costs no CPU or RAM; the first request resumes it. Measured cold start is about one second, and the web app's queries retry transient errors.
 
 Required variables:
 
