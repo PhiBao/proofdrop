@@ -15,9 +15,11 @@ import { CONTRACT_ADDRESS } from '../config'
 import { Countdown } from '../components/Countdown'
 import { StatusChip } from '../components/StatusChip'
 import { ConnectButton } from '../components/ConnectButton'
+import { ErrorToast } from '../components/ErrorToast'
 import { activeChain } from '../wagmi'
 import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { formatDate, okb, shortAddress, shortHash } from '../lib/format'
+import { friendlyError } from '../lib/errors'
 
 export function DrawPage() {
   const { id: rawId } = useParams()
@@ -95,7 +97,7 @@ export function DrawPage() {
     },
     onError: (err: Error) => {
       setMessage(null)
-      setError(err.message)
+      setError(friendlyError(err))
     },
   })
 
@@ -106,7 +108,7 @@ export function DrawPage() {
       setMessage('Entries locked. The seed block is set.')
       drawQuery.refetch()
     },
-    onError: (err: Error) => setError(err.message),
+    onError: (err: Error) => { setMessage(null); setError(friendlyError(err)) },
   })
 
   const runDraw = useMutation({
@@ -116,7 +118,7 @@ export function DrawPage() {
       setMessage('Draw executed and settled on X Layer.')
       drawQuery.refetch()
     },
-    onError: (err: Error) => setError(err.message),
+    onError: (err: Error) => { setMessage(null); setError(friendlyError(err)) },
   })
 
   const refund = useMutation({
@@ -134,7 +136,7 @@ export function DrawPage() {
       setMessage('Refund submitted. The prize is returning to the creator.')
       drawQuery.refetch()
     },
-    onError: (err: Error) => setError(err.message),
+    onError: (err: Error) => { setMessage(null); setError(friendlyError(err)) },
   })
 
   async function claim() {
@@ -148,7 +150,8 @@ export function DrawPage() {
       setClaimHash(hash)
       setMessage('Claim submitted. The prize is on its way.')
     } catch (err) {
-      setError((err as Error).message)
+      setMessage(null)
+      setError(friendlyError(err))
     }
   }
 
@@ -205,13 +208,14 @@ export function DrawPage() {
         </div>
       </div>
 
-      {(message || error) && (
-        <div className={error ? 'notice notice-error' : 'notice'}>
-          <span className="mono-label">{error ? 'ERROR' : 'OK'}</span>
-          <p>{error ?? message}</p>
-          <button className="notice-close" onClick={() => { setError(null); setMessage(null) }}>×</button>
+      {message && !error && (
+        <div className="notice" role="status">
+          <span className="mono-label">OK</span>
+          <p>{message}</p>
+          <button className="notice-close" onClick={() => setMessage(null)}>×</button>
         </div>
       )}
+      <ErrorToast message={error} onClose={() => { setError(null); setMessage(null) }} />
 
       <div className="draw-layout">
         <div className="draw-main">

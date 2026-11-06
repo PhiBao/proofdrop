@@ -85,7 +85,6 @@ export function Layout() {
           <div>
             <span className="mono-label">CONNECT</span>
             <a href="https://x.com/xProofDrop" target="_blank" rel="noreferrer">X · @xProofDrop ↗</a>
-            <a href="https://www.linkedin.com/in/kiter-phi-bao/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
           </div>
         </div>
         <p className="footer-fine mono">

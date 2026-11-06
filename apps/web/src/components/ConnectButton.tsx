@@ -4,6 +4,7 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { activeChain } from '../wagmi'
 import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { shortAddress } from '../lib/format'
+import { friendlyError } from '../lib/errors'
 
 export function ConnectButton() {
   const { address, isConnected, chainId } = useAccount()
@@ -108,7 +109,7 @@ export function ConnectButton() {
           <a className="menu-item subtle" href="https://web3.okx.com/download" target="_blank" rel="noreferrer">
             Get OKX Wallet ↗
           </a>
-          {error && <p className="menu-error">{error.message}</p>}
+          {error && <p className="menu-error">{friendlyError(error)}</p>}
         </div>
       )}
     </div>

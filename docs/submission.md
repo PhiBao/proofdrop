@@ -89,3 +89,4 @@ One settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB). The o
 - Architecture: https://github.com/PhiBao/proofdrop/blob/main/docs/diagrams/architecture.html
 - Sequence: https://github.com/PhiBao/proofdrop/blob/main/docs/diagrams/draw-sequence.html
 - Demo script: https://github.com/PhiBao/proofdrop/blob/main/docs/demo-script.md
+- X launch kit: https://github.com/PhiBao/proofdrop/blob/main/docs/x-launch.md

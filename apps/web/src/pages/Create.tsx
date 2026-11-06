@@ -15,9 +15,11 @@ import { api, encodeMetadataPayload, metadataMessage } from '../api'
 import { proofDropAbi } from '../abi'
 import { CONTRACT_ADDRESS } from '../config'
 import { ConnectButton } from '../components/ConnectButton'
+import { ErrorToast } from '../components/ErrorToast'
 import { activeChain } from '../wagmi'
 import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { formatDate, okb } from '../lib/format'
+import { friendlyError } from '../lib/errors'
 
 const WINDOWS = [
   { label: '15 minutes', value: 15 },
@@ -116,7 +118,7 @@ export function Create() {
       } catch (metaError) {
         // The escrow is already live. Never invite a second escrow just
         // because metadata failed; surface the warning and continue.
-        setError(`Draw #${id} is live, but metadata publishing failed: ${(metaError as Error).message}`)
+        setError(`Draw #${id} is live, but metadata publishing failed: ${friendlyError(metaError)}`)
       }
 
       setStep('done')
@@ -127,12 +129,13 @@ export function Create() {
     },
     onError: (err: Error) => {
       setStep('idle')
-      setError(err.message)
+      setError(friendlyError(err))
     },
   })
 
   return (
     <div className="page create-page">
+      <ErrorToast message={error} onClose={() => setError(null)} />
       <div className="page-head">
         <div>
           <span className="eyebrow mono">NEW DRAW</span>
@@ -143,13 +146,6 @@ export function Create() {
           </p>
         </div>
       </div>
-
-      {error && (
-        <div className="notice notice-error">
-          <span className="mono-label">ERROR</span>
-          <p>{error}</p>
-        </div>
-      )}
 
       <div className="create-layout">
         <form
