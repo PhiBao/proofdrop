@@ -445,7 +445,7 @@ pnpm --dir apps/web build
 
 - The draw calls a real TapeOut processor on X Layer mainnet: `0xfdbab05882fad8556e4f64f74e8532e95cce7cac`, circuit `#1`.
 - The circuit ID and processor are contract immutables; the proof page publishes them.
-- The static build is designed for DeWEB (relative assets, hash-routing option) and the proof page is intended to be the undeletable artifact.
+- The static build is designed for DeWEB (relative assets, hash-routing option), and the proof page is live there as the undeletable artifact.
 - FabX’s DeWEB and mining-weight incentives offer a natural distribution loop: a popular proof page drives traffic to the creator’s DeWEB, which can boost the tied miner’s weight.
 
 **Judging fit:**
@@ -454,9 +454,9 @@ pnpm --dir apps/web build
 |---|---|
 | User value & commercial potential | Creators pay 1% to protect reputation and increase entries; recurring weekly drops; visible fee. |
 | Innovation | Circuit-decided fairness + escrow + permanent replayable proof, not a VRF wrapper. |
-| Ecosystem integration | Real TapeOut circuit ID, X Layer escrow, DeWEB-ready static proof page, FabX ecosystem. |
+| Ecosystem integration | Real TapeOut circuit ID, X Layer escrow, live DeWEB proof page, FabX ecosystem. |
 | Readiness & UX | Working end-to-end flow, free entry, mobile-friendly proof page, failure states, public API. |
-| Demo | One judge action (enter) plus one replay (proof page) makes the thesis obvious in under a minute. |
+| Demo | A 100-second narrated walkthrough at `/demo`; the live open draw and the settled proof are both shown working. |
 
 **Revenue model:** 1% of the prize, minimum 0.0001 OKB, charged at escrow. Entrants pay nothing. The fee is visible before signature and is sent to the treasury in the creation transaction.
 
