@@ -49,6 +49,8 @@ ProofDrop makes the decision **legible and replayable**: the seed is a captured 
 
 1. **Escrow.** The creator calls `createDraw(prize, closeTime, maxEntries, committer)` with the prize plus a 1% fee (minimum 0.0001 OKB). The contract holds the prize.
 2. **Enter free.** An entrant signs a message binding their wallet to the draw. The API verifies the signature, de-duplicates the address, and appends it to the public list. No gas, no ticket price, no custody.
+
+The app targets X Layer mainnet (chain 196). On connect it asks the wallet to switch. If the wallet stays on another network, a network banner and the create/entry controls offer a one-click switch instead of failing with a chain error.
 3. **Commit.** After the entry window closes, the list is hashed into a Merkle root and committed on-chain. The same transaction fixes a future `seedBlock = block.number + 5`.
 4. **Seed.** Anyone calls `captureSeed` within the EVM’s 256-block window. The block hash is stored on-chain.
 5. **Draw.** The contract derives four 17-bit inputs from the seed, calls the TapeOut circuit four times, concatenates the 9-bit outputs into a 36-bit accumulator, and takes it modulo the entrant count.

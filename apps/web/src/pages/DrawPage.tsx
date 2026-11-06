@@ -16,6 +16,7 @@ import { Countdown } from '../components/Countdown'
 import { StatusChip } from '../components/StatusChip'
 import { ConnectButton } from '../components/ConnectButton'
 import { activeChain } from '../wagmi'
+import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { formatDate, okb, shortAddress, shortHash } from '../lib/format'
 
 export function DrawPage() {
@@ -23,12 +24,15 @@ export function DrawPage() {
   const id = Number(rawId)
   const queryClient = useQueryClient()
   const { address, chainId, isConnected } = useAccount()
+  const { switchToActiveChain, switching, error: switchError, clearError: clearSwitchError } = useSwitchToActiveChain()
   const { signMessageAsync } = useSignMessage()
   const { writeContractAsync } = useWriteContract()
   const [claimHash, setClaimHash] = useState<`0x${string}` | undefined>()
   const [handle, setHandle] = useState('')
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const wrongChain = isConnected && chainId !== activeChain.id
+  const shownError = error ?? switchError
 
   const drawQuery = useQuery({
     queryKey: ['draw', id],
@@ -202,11 +206,11 @@ export function DrawPage() {
         </div>
       </div>
 
-      {(message || error) && (
-        <div className={error ? 'notice notice-error' : 'notice'}>
-          <span className="mono-label">{error ? 'ERROR' : 'OK'}</span>
-          <p>{error ?? message}</p>
-          <button className="notice-close" onClick={() => { setError(null); setMessage(null) }}>×</button>
+      {(message || shownError) && (
+        <div className={shownError ? 'notice notice-error' : 'notice'}>
+          <span className="mono-label">{shownError ? 'ERROR' : 'OK'}</span>
+          <p>{shownError ?? message}</p>
+          <button className="notice-close" onClick={() => { setError(null); setMessage(null); clearSwitchError() }}>×</button>
         </div>
       )}
 
@@ -280,15 +284,23 @@ export function DrawPage() {
                         maxLength={50}
                       />
                     </label>
-                    <button
-                      className="btn btn-solid btn-lg"
-                      disabled={enter.isPending || chainId !== activeChain.id}
-                      onClick={() => enter.mutate()}
-                    >
-                      {enter.isPending ? 'Signing…' : 'Enter free'}
-                    </button>
-                    {chainId !== activeChain.id && (
-                      <span className="mono warn-text">Switch to {activeChain.name} in your wallet.</span>
+                    {wrongChain ? (
+                      <button
+                        className="btn btn-solid btn-lg"
+                        type="button"
+                        onClick={() => void switchToActiveChain()}
+                        disabled={switching}
+                      >
+                        {switching ? 'Switching…' : `Switch to ${activeChain.name}`}
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-solid btn-lg"
+                        disabled={enter.isPending}
+                        onClick={() => enter.mutate()}
+                      >
+                        {enter.isPending ? 'Signing…' : 'Enter free'}
+                      </button>
                     )}
                   </div>
                 ) : (

@@ -16,6 +16,7 @@ import { proofDropAbi } from '../abi'
 import { CONTRACT_ADDRESS } from '../config'
 import { ConnectButton } from '../components/ConnectButton'
 import { activeChain } from '../wagmi'
+import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { formatDate, okb } from '../lib/format'
 
 const WINDOWS = [
@@ -28,6 +29,7 @@ const WINDOWS = [
 export function Create() {
   const navigate = useNavigate()
   const { address, isConnected, chainId } = useAccount()
+  const { switchToActiveChain, switching, error: switchError } = useSwitchToActiveChain()
   const { signMessageAsync } = useSignMessage()
   const { writeContractAsync } = useWriteContract()
   const publicClient = usePublicClient()
@@ -62,6 +64,8 @@ export function Create() {
   const total = prizeWei + fee
   const feeReady = feeRead.isSuccess
   const closeTime = Math.floor(Date.now() / 1000) + windowMinutes * 60
+  const wrongChain = isConnected && chainId !== activeChain.id
+  const shownError = error ?? switchError
 
   const create = useMutation({
     mutationFn: async () => {
@@ -141,10 +145,10 @@ export function Create() {
         </div>
       </div>
 
-      {error && (
+      {shownError && (
         <div className="notice notice-error">
           <span className="mono-label">ERROR</span>
-          <p>{error}</p>
+          <p>{shownError}</p>
         </div>
       )}
 
@@ -153,6 +157,10 @@ export function Create() {
           className="create-form"
           onSubmit={(e) => {
             e.preventDefault()
+            if (wrongChain) {
+              void switchToActiveChain()
+              return
+            }
             create.mutate()
           }}
         >
@@ -230,18 +238,27 @@ export function Create() {
           </div>
 
           <div className="create-submit">
-            {isConnected ? (
+            {!isConnected ? (
+              <ConnectButton />
+            ) : wrongChain ? (
+              <button
+                className="btn btn-solid btn-lg"
+                type="button"
+                onClick={() => void switchToActiveChain()}
+                disabled={switching}
+              >
+                {switching ? 'Switching…' : `Switch to ${activeChain.name}`}
+              </button>
+            ) : (
               <button className="btn btn-solid btn-lg" type="submit" disabled={create.isPending || step === 'done'}>
                 {step === 'escrowing' && 'Escrowing prize…'}
                 {step === 'metadata' && 'Publishing metadata…'}
                 {step === 'done' && 'Draw is live'}
                 {step === 'idle' && (feeReady ? `Escrow ${okb(total)} OKB` : 'Reading fee…')}
               </button>
-            ) : (
-              <ConnectButton />
             )}
-            {chainId !== activeChain.id && isConnected && (
-              <span className="mono warn-text">Switch to {activeChain.name} in your wallet.</span>
+            {wrongChain && (
+              <span className="mono warn-text">Your wallet is on another network. Switch to continue.</span>
             )}
           </div>
         </form>

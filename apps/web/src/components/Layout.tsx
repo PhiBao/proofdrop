@@ -1,8 +1,10 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { useAccount } from 'wagmi'
 
 import { ConnectButton } from './ConnectButton'
 import { Logo } from './Logo'
 import { activeChain } from '../wagmi'
+import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 
 const nav = [
   { to: '/explore', label: 'Explore' },
@@ -14,6 +16,9 @@ const nav = [
 export function Layout() {
   const location = useLocation()
   const isProof = location.pathname.endsWith('/proof')
+  const { isConnected, chainId } = useAccount()
+  const { switchToActiveChain, switching, error: switchError } = useSwitchToActiveChain()
+  const wrongChain = isConnected && chainId !== activeChain.id
 
   return (
     <div className="shell">
@@ -41,6 +46,21 @@ export function Layout() {
           </NavLink>
         ))}
       </nav>
+      {wrongChain && (
+        <div className="chain-banner">
+          <span className="chain-banner-text">
+            {switchError ?? `Your wallet is on another network. Draws run on ${activeChain.name}.`}
+          </span>
+          <button
+            className="btn btn-solid btn-sm"
+            type="button"
+            onClick={() => void switchToActiveChain()}
+            disabled={switching}
+          >
+            {switching ? 'Switching…' : `Switch to ${activeChain.name}`}
+          </button>
+        </div>
+      )}
       <main className={isProof ? 'main proof-main' : 'main'}>
         <Outlet />
       </main>

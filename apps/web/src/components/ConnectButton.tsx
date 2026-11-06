@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
 import { activeChain } from '../wagmi'
+import { useSwitchToActiveChain } from '../hooks/useActiveChain'
 import { shortAddress } from '../lib/format'
 
 export function ConnectButton() {
-  const { address, connector, isConnected, chainId } = useAccount()
+  const { address, isConnected, chainId } = useAccount()
   const { connectors, connect, isPending, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const { switchChain, switchChainAsync, isPending: switching } = useSwitchChain()
+  const { switchToActiveChain, switching, error: switchError } = useSwitchToActiveChain()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const autoSwitch = useRef<string | null>(null)
@@ -25,37 +26,18 @@ export function ConnectButton() {
   // an account appears, then stop asking for that account/chain pair so a
   // rejected request does not turn into a popup loop.
   useEffect(() => {
-    if (!isConnected || !address || chainId === undefined) return
+    if (!isConnected || !address) return
     if (chainId === activeChain.id) {
       autoSwitch.current = null
       return
     }
 
-    const key = `${address}:${chainId}`
+    const key = `${address}:${chainId ?? 'unknown'}`
     if (autoSwitch.current === key || switching) return
     autoSwitch.current = key
 
-    void (async () => {
-      try {
-        await switchChainAsync({ chainId: activeChain.id })
-
-        // Some wallets add X Layer during the 4902 fallback but leave the
-        // active chain unchanged. Check the provider and switch once more.
-        const provider = (await connector?.getProvider()) as
-          | { request?: (args: { method: string; params?: unknown[] }) => Promise<unknown> }
-          | undefined
-        if (!provider?.request) return
-        const current = await provider.request({ method: 'eth_chainId' })
-        if (Number(current) === activeChain.id) return
-        await provider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${activeChain.id.toString(16)}` }],
-        })
-      } catch {
-        // The manual switch in the wallet menu remains available.
-      }
-    })()
-  }, [address, chainId, connector, isConnected, switchChainAsync, switching])
+    void switchToActiveChain()
+  }, [address, chainId, isConnected, switchToActiveChain, switching])
 
   if (isConnected && address) {
     const wrongChain = chainId !== activeChain.id
@@ -75,11 +57,12 @@ export function ConnectButton() {
               <button
                 className="menu-item"
                 disabled={switching}
-                onClick={() => switchChain({ chainId: activeChain.id })}
+                onClick={() => void switchToActiveChain()}
               >
                 {switching ? 'Switching…' : `Switch to ${activeChain.name}`}
               </button>
             )}
+            {switchError && <p className="menu-error">{switchError}</p>}
             <a className="menu-item" href={`${activeChain.blockExplorers.default.url}/address/${address}`} target="_blank" rel="noreferrer">
               View on explorer ↗
             </a>
