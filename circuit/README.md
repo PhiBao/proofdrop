@@ -2,6 +2,28 @@
 
 A 17-input, 9-output, NAND-only combinational mixer.
 
+## Live deployment
+
+| Item | Value |
+|---|---|
+| Processor | `0xfdbab05882fad8556e4f64f74e8532e95cce7cac` — “ProofDrop Draw” |
+| Circuit ID | `1` |
+| Supply | 10,000 transistors |
+| Burned | 403 NAND |
+| Tape-out tx | `0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca` |
+| Live escrow | `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb` |
+
+On-chain raw outputs (input bytes LSB-first):
+
+| Input | Raw output |
+|---|---|
+| `0x000000` | `0x8900` |
+| `0x010000` | `0x0000` |
+| `0x020000` | `0x9b01` |
+| `0xffff01` | `0x0e01` |
+
+The raw two-byte output packs `y0..y7` into the first byte and `y8` into bit 0 of the second. The escrow reads `out[0] << 8 | out[1]` and masks `0x1FF`, which is a permutation of the nine output bits; the distribution stays uniform. The canvas natural values are `0x089`, `0x000`, `0x19b`, and `0x10e`.
+
 Files:
 
 | File | Purpose |
@@ -77,33 +99,14 @@ The `.v` file is the portable reference. If you need a standard-tool BLIF, synth
 5. Import to canvas and use the canvas self-check.
 6. Tape out on a processor with 403 NAND available.
 
-### Supply reality
+### Processor history
 
-The canvas defaults to **FAB-Genesis** (`0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6`). Its transistor supply is sold out: a `mint(0, 403)` call reverts with `supply cap`. Importing works, but “Mint 403 and tape out” on FAB-Genesis will fail unless you acquire 403 NAND on the market.
+The final deployment uses a processor we created: **ProofDrop Draw**, 10,000 transistor supply, mint price 0, on X Layer. It is registered with the official TapeOut factory. Circuit #1 burned 403 NAND.
 
-A registered free processor with supply is:
+The Fab X canvas default, **FAB-Genesis**, is sold out: `mint(0, 403)` reverts with `supply cap`. The free community processor `0x7335…308f` remains a fallback if a future circuit needs a different processor, but it is not used by the live app.
 
-```
-processor   0x7335a50819d44402e3d5e00239bbb80a13e7308f
-transistors 0xe45d5a9b01582204f597eb0be44d6e0a335ca6db
-NAND id     0
-mintPrice   0
-protocolFee 0.00066 OKB
-tapeoutFee  0.0013 OKB
-nextId      4
-```
+## Deployment status
 
-Minting 403 NAND and taping out the above netlist costs roughly **0.002 OKB plus gas**. The exact payload is in `draw_mix.hex`; the processor ABI is the standard TapeOut `mint`, `tapeout(nl, nIn, nOut)`, and `eval`.
+The live escrow `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb` uses processor `0xfdbab05882fad8556e4f64f74e8532e95cce7cac` and circuit `1`. Draw #1, “First Silicon,” is settled and its proof page is live.
 
-This processor is community-operated. It is registered with the X Layer TapeOut factory and its `eval` works, but it is less prestigious than FabX's own processor. Use it only if the FAB-Genesis market route is not viable.
-
-## After tape-out
-
-The current escrow's `processor` and `circuitId` are immutable. To make the new circuit live:
-
-1. Deploy a new `ProofDrop` with `PROCESSOR` set to the chosen processor and `CIRCUIT_ID` to the new circuit ID.
-2. Run a new draw through the new circuit.
-3. Update the API env (`PROCESSOR_ADDRESS`, `CONTRACT_ADDRESS`, `CIRCUIT_ID`) and the web build.
-4. Publish the new processor address, circuit ID, and proof page.
-
-Do not claim the circuit is live until the tape-out transaction is confirmed and `eval(newCircuitId, input)` matches the vectors.
+The older FabX circuit #24 proof is archived at [`docs/proofs/tapeout-24-draw-1.json`](../docs/proofs/tapeout-24-draw-1.json).

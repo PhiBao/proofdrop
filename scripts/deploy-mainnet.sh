@@ -8,8 +8,8 @@ set -a
 set +a
 
 RPC="${RPC:-https://rpc.xlayer.tech}"
-PROCESSOR="${PROCESSOR:-0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6}"
-CIRCUIT_ID="${CIRCUIT_ID:-24}"
+PROCESSOR="${PROCESSOR:-0xfdbab05882fad8556e4f64f74e8532e95cce7cac}"
+CIRCUIT_ID="${CIRCUIT_ID:-1}"
 
 balance=$(cast balance "$DEPLOYER_ADDRESS" --rpc-url "$RPC")
 echo "[mainnet] deployer $DEPLOYER_ADDRESS"

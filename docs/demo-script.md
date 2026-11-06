@@ -4,7 +4,7 @@
 
 - The live app is on X Layer mainnet: https://proofdrop-1xx.pages.dev
 - The settled proof is at: https://proofdrop-1xx.pages.dev/d/1/proof
-- The mainnet draw #1 is settled: winner `0xd562…d8fc`, settlement tx `0x6f22…5fd3`.
+- The mainnet draw #1, “First Silicon,” is settled: winner `0x2516…d628`, settlement tx `0x95f2…d46f`.
 - Optional: if you create a new mainnet draw during the recording, use a small prize and keep the explorer tab open. Do not stage a fake draw.
 
 ## Timeline
@@ -39,7 +39,7 @@ If you have a live open draw, switch to it and sign one entry on a phone. Otherw
 **Visual:** Draw #1 commit and draw transactions; then the winner index and settlement.
 
 **Voiceover:**
-> “When entries close, the list is hashed and committed on-chain. The same transaction fixes a future block. The contract captures that block hash, calls circuit twenty-four four times, and turns the output into a winner index. Nobody can change the list after this point.”
+> “When entries close, the list is hashed and committed on-chain. The same transaction fixes a future block. The contract captures that block hash, calls its own circuit four times, and turns the output into a winner index. Nobody can change the list after this point.”
 
 ### 1:50–2:20 — The moment
 

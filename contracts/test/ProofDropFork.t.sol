@@ -7,8 +7,8 @@ import { ProofDrop } from "../src/ProofDrop.sol";
 /// @notice Runs against a fork of X Layer mainnet to prove the real TapeOut
 ///         circuit integration works and to measure draw gas.
 contract ProofDropForkTest is Test {
-    address constant PROCESSOR = 0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6;
-    uint256 constant CIRCUIT_ID = 24;
+    address constant PROCESSOR = 0xfdBAb05882Fad8556e4f64f74e8532e95CcE7CAc;
+    uint256 constant CIRCUIT_ID = 1;
 
     receive() external payable {}
 

@@ -46,7 +46,7 @@ ProofDrop makes the decision **legible and replayable**: the seed is a captured 
 
 ## How a draw works
 
-1. **Escrow.** The creator calls `createDraw(prize, closeTime, maxEntries, committer)` with the prize plus a 1% fee (minimum 0.001 OKB). The contract holds the prize.
+1. **Escrow.** The creator calls `createDraw(prize, closeTime, maxEntries, committer)` with the prize plus a 1% fee (minimum 0.0001 OKB). The contract holds the prize.
 2. **Enter free.** An entrant signs a message binding their wallet to the draw. The API verifies the signature, de-duplicates the address, and appends it to the public list. No gas, no ticket price, no custody.
 3. **Commit.** After the entry window closes, the list is hashed into a Merkle root and committed on-chain. The same transaction fixes a future `seedBlock = block.number + 5`.
 4. **Seed.** Anyone calls `captureSeed` within the EVM’s 256-block window. The block hash is stored on-chain.
@@ -83,7 +83,7 @@ TapeOut is the only stack where the selection function can be:
 - **cheap to call** — `eval` is a read-only call; the draw transaction pays gas for the gate execution;
 - **legible** — the proof page can show the circuit ID and every round's bytes, not just “trust the RNG”.
 
-The live deployment uses **TapeOut circuit #24** (17 inputs, 9 outputs, 140 gates) on X Layer mainnet. Why a general circuit instead of a bespoke RNG? Circuit #24 is already taped out, audited by usage, and its `eval` behavior is stable. The product's innovation is the commitment + escrow + proof system around it. A dedicated draw circuit is the next step; the contract takes `processor` and `circuitId` as immutables, so the engine can be swapped by deploying a new escrow.
+The live deployment uses **ProofDrop Draw**, a processor we created on X Layer mainnet, and **circuit #1**, a 17-in / 9-out NAND-only mixer taped out on that processor. The circuit is a bijective 17-bit xorshift; its 9-bit projection is exactly uniform over 512 outputs. It has no state, no clock, and no external calls, so `eval` is deterministic and cheap. The processor and circuit ID are immutables in the escrow; the proof page publishes both. This is a dedicated draw circuit, not a borrowed general-purpose circuit.
 
 > A circuit call is not a VRF. The seed is a block hash, and X Layer's block producer could theoretically influence it. The list is committed before the seed block exists, so the creator cannot choose a seed after seeing entries. This residual bias is disclosed on the proof page and in [Security](#security-model). It is a deliberate tradeoff for a transparent, replayable decision with no oracle dependency.
 
@@ -113,7 +113,7 @@ Static React app (Cloudflare Pages / DeWEB) ── Rust API (Axum + SQLx)
 ProofDrop escrow contract (X Layer)
         │  eval(circuitId, 3 bytes)
         ▼
-TapeOut processor + circuit #24 (X Layer mainnet)
+ProofDrop Draw processor + circuit #1 (X Layer mainnet)
 ```
 
 ### Components
@@ -123,7 +123,7 @@ TapeOut processor + circuit #24 (X Layer mainnet)
 | Web app | React 19, Vite, TypeScript, wagmi/viem | Create/enter/claim, live draw stage, proof replay. Static build can be published to DeWEB. |
 | API | Rust, Axum, Tokio, SQLx, alloy | Signature verification, entrant list, Merkle root, chain orchestration, proof reconstruction. |
 | Escrow | Solidity 0.8.28, Foundry | Custody, commitment, seed capture, circuit call, Merkle settlement, refunds. |
-| Circuit | TapeOut circuit #24 on X Layer mainnet | Deterministic 17-in / 9-out gate evaluation. |
+| Circuit | ProofDrop Draw processor, circuit #1 | Dedicated 403-NAND, 17-in / 9-out draw mixer. |
 | Database | SQLite (WAL) | Public entrant list, draw metadata, settlement tx hash. |
 | Hosting | Cloudflare Pages (web), Fly.io (API) | Public demo; no server-side key handling in the browser. |
 
@@ -174,7 +174,7 @@ Deploy to X Layer testnet with the mock processor:
 cd contracts
 export PRIVATE_KEY=0x...
 export DEPLOY_MOCK=true
-export CIRCUIT_ID=24
+export CIRCUIT_ID=1
 export FEE_BPS=100
 export MIN_FEE=1000000000000000
 export ROUNDS=4
@@ -188,9 +188,9 @@ Deploy to X Layer mainnet with the live TapeOut circuit:
 ./scripts/deploy-mainnet.sh
 ```
 
-The script reads `.secrets/deployer.env`, refuses to run below 0.008 OKB, deploys with processor `0x87BF…F9a6` and circuit `24`, and writes the resulting address to `.secrets/mainnet-contract.env`.
+The script reads `.secrets/deployer.env`, refuses to run below 0.008 OKB, deploys with processor `0xfdba…7cac` and circuit `1`, and writes the resulting address to `.secrets/mainnet-contract.env`.
 
-**Mainnet status:** deployed at [`0xc3cF…41d9`](https://www.okx.com/web3/explorer/xlayer/address/0xc3cFf081656A338a84Ce80F4463aA69B375841D9). Draw #1 is settled and paid. The earlier testnet rehearsal (mock processor) remains in the repository and README only as a reproducibility path, not as the live app.
+**Mainnet status:** the dedicated processor is [`0xfdbab…7cac`](https://www.okx.com/web3/explorer/xlayer/address/0xfdbab05882fad8556e4f64f74e8532e95cce7cac) (ProofDrop Draw, 10,000-transistor supply; circuit #1 burned 403 NAND). The escrow is [`0x2D2d…eBb`](https://www.okx.com/web3/explorer/xlayer/address/0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb). Draw #1, “First Silicon,” is settled and paid. The earlier FabX circuit #24 proof is archived at [`docs/proofs/tapeout-24-draw-1.json`](docs/proofs/tapeout-24-draw-1.json); the testnet mock is historical.
 
 The fork test `testRealCircuitPreview` proves the real circuit integration and measures the call path:
 
@@ -212,12 +212,12 @@ Required variables:
 |---|---|---|
 | `PORT` | `8090` | API port |
 | `DATABASE_URL` | `sqlite://data/proofdrop.db` | SQLite path |
-| `RPC_URL` | `https://testrpc.xlayer.tech/terigon` | X Layer RPC |
+| `RPC_URL` | `https://rpc.xlayer.tech` | X Layer RPC |
 | `CHAIN_ID` | `196` | 196 mainnet, 1952 testnet |
-| `CONTRACT_ADDRESS` | `0xC56d…530a` | deployed ProofDrop |
-| `PROCESSOR_ADDRESS` | `0x1f27…71a2` | eval processor used by the proof endpoint |
-| `CIRCUIT_ID` | `24` | TapeOut circuit |
-| `EXPLORER_URL` | `https://www.okx.com/web3/explorer/xlayer-test` | explorer base |
+| `CONTRACT_ADDRESS` | `0x2D2d…eBb` | deployed ProofDrop |
+| `PROCESSOR_ADDRESS` | `0xfdba…7cac` | ProofDrop Draw processor used by the proof endpoint |
+| `CIRCUIT_ID` | `1` | ProofDrop Draw circuit |
+| `EXPLORER_URL` | `https://www.okx.com/web3/explorer/xlayer` | explorer base |
 | `PRIVATE_KEY` | `0x…` | orchestrator key (server-only) |
 | `PUBLIC_BASE_URL` | `https://proofdrop-api.fly.dev` | links |
 | `DEMO_MODE` | `false` | `true` shows the rehearsal banner on a testnet deployment |
@@ -238,7 +238,7 @@ The Vite dev server proxies `/api` to `http://localhost:8090` when `VITE_API_URL
 ```bash
 VITE_API_URL=https://proofdrop-api.fly.dev \
 VITE_CHAIN_ID=196 \
-VITE_CONTRACT_ADDRESS=0xc3cFf081656A338a84Ce80F4463aA69B375841D9 \
+VITE_CONTRACT_ADDRESS=0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb \
 VITE_RPC_URL=https://rpc.xlayer.tech \
 VITE_EXPLORER_URL=https://www.okx.com/web3/explorer/xlayer \
 pnpm build
@@ -268,15 +268,15 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 
 | Claim | Evidence |
 |---|---|
-| Prize escrow and settlement | `ProofDrop` on X Layer mainnet: [`0xc3cFf081656A338a84Ce80F4463aA69B375841D9`](https://www.okx.com/web3/explorer/xlayer/address/0xc3cFf081656A338a84Ce80F4463aA69B375841D9) |
+| Prize escrow and settlement | `ProofDrop` on X Layer mainnet: [`0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb`](https://www.okx.com/web3/explorer/xlayer/address/0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb) |
 | Draw #1 entrant root | `0xf502b58a94a6543bede59637252bf74b9dc67c8616a16556a98573de314018cf` |
-| Draw #1 seed block | `74367126` |
-| Draw #1 seed | `0x2bf83a2dd7de1738eb994837f075d7b87ed6f28061e3b476b19590919da9165c` |
-| Draw #1 winner | index `1` → `0xd56256179ac09a8a07a82cc6e5cddb971842d8fc` |
-| Draw #1 create tx | [`0xfe7dce93b17fb999f1ebd665246ece08b0dbbbac05aaf7588cc2758ae4c377b9`](https://www.okx.com/web3/explorer/xlayer/tx/0xfe7dce93b17fb999f1ebd665246ece08b0dbbbac05aaf7588cc2758ae4c377b9) |
-| Draw #1 commit tx | [`0x1f04a33d9c113d64e7ed20595f595b8652ad91b1315e60fd24ffe91cd9861e76`](https://www.okx.com/web3/explorer/xlayer/tx/0x1f04a33d9c113d64e7ed20595f595b8652ad91b1315e60fd24ffe91cd9861e76) |
-| Draw #1 draw tx | [`0x12c56761ec2b4719e0b06b140ca7d29b5bd1346e582512786a7991a147e9d5a9`](https://www.okx.com/web3/explorer/xlayer/tx/0x12c56761ec2b4719e0b06b140ca7d29b5bd1346e582512786a7991a147e9d5a9) |
-| Draw #1 settlement tx | [`0x6f22a9c5670d9972372d97676769033b681c89571e8e9f9d90274b5a32d65fd3`](https://www.okx.com/web3/explorer/xlayer/tx/0x6f22a9c5670d9972372d97676769033b681c89571e8e9f9d90274b5a32d65fd3) |
+| Draw #1 seed block | `75174147` |
+| Draw #1 seed | `0x3b6ce50309ca7131af912ed917cc450e53fe437f6c9cfb1f8e53decaf6da1e6e` |
+| Draw #1 winner | index `0` → `0x2516f212e268708ee4a121f44e58ff4ffa68d628` |
+| Draw #1 create tx | [`0x82f3aa902c377e2df894f391623ec9d46693edd349ac3f66536935eb3e107821`](https://www.okx.com/web3/explorer/xlayer/tx/0x82f3aa902c377e2df894f391623ec9d46693edd349ac3f66536935eb3e107821) |
+| Draw #1 commit tx | [`0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38`](https://www.okx.com/web3/explorer/xlayer/tx/0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38) |
+| Draw #1 draw tx | [`0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d`](https://www.okx.com/web3/explorer/xlayer/tx/0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d) |
+| Draw #1 settlement tx | [`0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f`](https://www.okx.com/web3/explorer/xlayer/tx/0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f) |
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
@@ -287,7 +287,8 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Claim | Status |
 |---|---|
 | Live path | Real: prize escrow, entry signatures, Merkle commitment, seed capture, circuit call, payout, and proof page are X Layer mainnet transactions. |
-| Circuit evaluation | Real TapeOut processor `0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6`, circuit `24`. Round 0 input `0x496a01` returns `0xb400`; round 3 input `0x66f501` returns `0x5c01`. |
+| Circuit evaluation | Real ProofDrop Draw processor `0xfdbab05882fad8556e4f64f74e8532e95cce7cac`, circuit `1`, 403 NAND gates. Round 0 input `0x7b6200` returns `0x7d01`; round 3 input `0x9ed200` returns `0x5901`. |
+| Earlier mainnet rehearsal | The first proof used FabX circuit #24 (`0x87BF…F9a6`) and escrow `0xc3cF…41d9`; it is archived at [`docs/proofs/tapeout-24-draw-1.json`](docs/proofs/tapeout-24-draw-1.json). |
 | Earlier testnet rehearsal | Historical only. It used `MockProcessor` `0x1f27…71a2` and testnet escrow `0xC56d…530a`; it is not the live app. |
 | DeWEB hosting | The static build supports relative assets and hash routing. Publishing to DeWEB requires a TapeOut circuit container and an activation fee on X Layer; Cloudflare Pages is the live surface today. |
 | Sybil resistance | One address per draw, signature verification, and off-chain abuse controls. Not perfect sybil resistance; disclosed. |
@@ -297,21 +298,21 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 
 ```bash
 # 1. Read the committed draw
-cast call 0xc3cFf081656A338a84Ce80F4463aA69B375841D9 \
+cast call 0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb \
   "getDraw(uint256)((address,address,address,uint256,uint64,uint64,uint32,uint32,uint32,uint8,bool,bool,bool,bytes32,bytes32))" \
   1 --rpc-url https://rpc.xlayer.tech
 
 # 2. Re-run the real circuit for round 0
-cast call 0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6 \
-  "eval(uint256,bytes)(bytes)" 24 0x496a01 \
+cast call 0xfdbab05882fad8556e4f64f74e8532e95cce7cac \
+  "eval(uint256,bytes)(bytes)" 1 0x7b6200 \
   --rpc-url https://rpc.xlayer.tech
-# -> 0xb400
+# -> 0x7d01
 
 # 3. Re-run round 3
-cast call 0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6 \
-  "eval(uint256,bytes)(bytes)" 24 0x66f501 \
+cast call 0xfdbab05882fad8556e4f64f74e8532e95cce7cac \
+  "eval(uint256,bytes)(bytes)" 1 0x9ed200 \
   --rpc-url https://rpc.xlayer.tech
-# -> 0x5c01
+# -> 0x5901
 ```
 
 The proof page publishes the four round inputs, outputs, 9-bit values, accumulator, winner index, Merkle proof, and settlement link.
@@ -323,7 +324,7 @@ The proof page publishes the four round inputs, outputs, 9-bit values, accumulat
 1. **Hook (0:00–0:20).** “A creator was accused of rigging a giveaway. A screenshot cannot prove otherwise.”
 2. **Create + escrow (0:20–0:50).** Open `/create`, enter a prize, sign `createDraw`, show the escrow transaction on OKX Explorer.
 3. **Enter (0:50–1:20).** Open the draw link on a phone, connect OKX Wallet, sign a free entry. Show the public entrant list.
-4. **Lock + draw (1:20–1:50).** Close entries, lock the list, run the draw. The contract captures the seed block, calls circuit #24, and settles the winner.
+4. **Lock + draw (1:20–1:50).** Close entries, lock the list, run the draw. The contract captures the seed block, calls circuit #1, and settles the winner.
 5. **The moment (1:50–2:20).** Open the proof page. Replay the four circuit rounds; show the same winner index and the settlement transaction.
 6. **Business + close (2:20–3:00).** 1% fee, recurring creator drops, DeWEB proof page. “Don’t trust the draw. Replay it.”
 
@@ -364,7 +365,7 @@ A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). 
 ### Known risks
 
 - **Block-producer bias.** A block producer can influence the seed block. The list is committed first, which removes creator choice; it does not remove miner/sequencer influence.
-- **Processor implementation.** The TapeOut processor is an external contract; if its implementation is upgradeable, the `eval` behavior could change. The circuit ID and netlist are public, but high-value draws should pin and verify the processor implementation before escrow. The escrow treats the processor address as immutable.
+- **Processor implementation.** The processor is registered with the X Layer TapeOut factory, but the factory is unsealed at the time of writing. The processor/circuit implementation should be treated as upgradeable until sealed. The circuit netlist, processor address, and eval results are public; high-value draws should pin and verify the implementation before escrow.
 - **Off-chain list custody.** The public list lives in SQLite; the on-chain root is the source of truth. The recovery endpoint can rebuild the list only if the entries are supplied and the root matches. A lost list means the proof page cannot reconstruct the Merkle proof until restored.
 - **Prize promotion rules.** Entries are free. Do not use ProofDrop for paid-entry lotteries or regulated gambling without legal review.
 
@@ -421,7 +422,7 @@ pnpm --dir apps/web build
 
 **TapeOut usage:**
 
-- The draw calls a real TapeOut processor on X Layer mainnet: `0x87BFCa3494Aa228fF589ab9B642143A5e8c8F9a6`, circuit `#24`.
+- The draw calls a real TapeOut processor on X Layer mainnet: `0xfdbab05882fad8556e4f64f74e8532e95cce7cac`, circuit `#1`.
 - The circuit ID and processor are contract immutables; the proof page publishes them.
 - The static build is designed for DeWEB (relative assets, hash-routing option) and the proof page is intended to be the undeletable artifact.
 - FabX’s DeWEB and mining-weight incentives offer a natural distribution loop: a popular proof page drives traffic to the creator’s DeWEB, which can boost the tied miner’s weight.
@@ -436,7 +437,7 @@ pnpm --dir apps/web build
 | Readiness & UX | Working end-to-end flow, free entry, mobile-friendly proof page, failure states, public API. |
 | Demo | One judge action (enter) plus one replay (proof page) makes the thesis obvious in under a minute. |
 
-**Revenue model:** 1% of the prize, minimum 0.001 OKB, charged at escrow. Entrants pay nothing. The fee is visible before signature and is sent to the treasury in the creation transaction.
+**Revenue model:** 1% of the prize, minimum 0.0001 OKB, charged at escrow. Entrants pay nothing. The fee is visible before signature and is sent to the treasury in the creation transaction.
 
 ---
 
