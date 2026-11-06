@@ -31,7 +31,8 @@ export function DemoPage() {
           <h1>The whole loop,<br />in one take.</h1>
           <p className="page-sub">
             A creator escrows a prize, a demo wallet enters the open draw, and a settled
-            draw replays through its own circuit. Every transaction is on X Layer mainnet.
+            draw replays through its own circuit. Every transaction shown is on X Layer
+            mainnet.
           </p>
         </div>
       </div>
