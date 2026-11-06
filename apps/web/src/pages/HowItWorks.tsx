@@ -119,6 +119,10 @@ winnerIndex = accumulator % entryCount`}</pre>
             <p>Prize escrow, entry signatures, Merkle commitment, seed capture, the circuit call, payout, and the proof page are real X Layer mainnet transactions in the live deployment.</p>
           </div>
           <div className="verify-row">
+            <span className="mono-label">DEWEB</span>
+            <p>The static proof for draw #1 is live at <a className="text-link" href="https://1-2-413.tapekit.org" target="_blank" rel="noreferrer">1-2-413.tapekit.org</a> under the on-chain name <code>1.2.413.tape</code>. The interactive app remains on Cloudflare Pages.</p>
+          </div>
+          <div className="verify-row">
             <span className="mono-label">SIMULATED</span>
             <p>Nothing in the live path. The earlier testnet rehearsal used a mock processor; it remains documented in the README so the escrow and draw flow can be reproduced without mainnet funds.</p>
           </div>

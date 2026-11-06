@@ -282,7 +282,9 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
-| Proof survival | The proof page ships with a static JSON fallback at `/proofs/1.json`; if the API is down, the receipt still renders. |
+| Proof survival | The proof page ships with a static JSON fallback at `/proofs/1.json` and a DeWEB copy at https://1-2-413.tapekit.org. |
+| DeWEB proof | Name `1.2.413.tape`, container `0xa5bfe431…535c`, one file `index.html` (11,137 bytes, sha256 `0x1e3c…de0d`). `isLive` and `isContainerLive` return true. |
+| DeWEB transactions | [open](https://www.okx.com/web3/explorer/xlayer/tx/0x9470d6c5d57b5ed801191ee4329a2ead960876690f77884ee1cb965e6c7ea541) · [publish](https://www.okx.com/web3/explorer/xlayer/tx/0xe947a006c51c4f5fcdd63197e1b3f3cd00072952f787e756bce21be682bc29c1) · [bind](https://www.okx.com/web3/explorer/xlayer/tx/0x6f26821a4aa02a51f5a27f10100d6063c2b49a19491d5d174c790f4cf37f2835) |
 | Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 3 entries: https://proofdrop-1xx.pages.dev/d/2 |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
@@ -294,7 +296,7 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Circuit evaluation | Real ProofDrop Draw processor `0xfdbab05882fad8556e4f64f74e8532e95cce7cac`, circuit `1`, 403 NAND gates. Round 0 input `0x7b6200` returns `0x7d01`; round 3 input `0x9ed200` returns `0x5901`. |
 | Earlier mainnet rehearsal | The first proof used FabX circuit #24 (`0x87BF…F9a6`) and escrow `0xc3cF…41d9`; it is archived at [`docs/proofs/tapeout-24-draw-1.json`](docs/proofs/tapeout-24-draw-1.json). |
 | Earlier testnet rehearsal | Historical only. It used `MockProcessor` `0x1f27…71a2` and testnet escrow `0xC56d…530a`; it is not the live app. |
-| DeWEB hosting | Not live yet. The static build is DeWEB-ready, and the proof page ships with a static JSON fallback (`/proofs/1.json`) so an API outage does not erase the receipt. Full DeWEB publication needs opening the circuit container with the official X Layer opener (0.08 OKB fee) plus SiteRegistry gas; the circuit owner currently has ~0.045 OKB, so the path is prepared but unfunded. |
+| DeWEB hosting | Live for the proof page at https://1-2-413.tapekit.org. The container was opened with the official opener, the 11,137-byte page was written to SiteRegistry, and the name `1.2.413.tape` is bound. The interactive app remains on Cloudflare Pages. |
 | Sybil resistance | One address per draw, signature verification, and off-chain abuse controls. Not perfect sybil resistance; disclosed. |
 | Block-producer neutrality | Not claimed. The list is committed before the seed block, but X Layer’s block producer could influence the hash. Disclosed on the proof page. |
 
@@ -403,14 +405,14 @@ pnpm --dir apps/web build
 - Wallet-only entry (no X-handle entry or social login yet).
 - One winner per draw; no multi-winner or NFT prize support.
 - SQLite is appropriate for a single-instance demo, not a multi-region production service.
-- DeWEB publishing is prepared but not live; it needs the 0.08 OKB official container opener fee plus SiteRegistry storage gas.
+- The full interactive app is on Cloudflare Pages; the DeWEB copy is the static proof page. The container opener cost 0.08 OKB, paid once.
 - No independent security audit.
 
 ### Next steps
 
 1. Run recurring mainnet draws and keep one open for the submission window.
 2. Tape out a dedicated draw circuit (16-bit xorshift + rejection) and publish its processor address and circuit ID.
-3. Publish the static proof app to DeWEB; mirror the build on Cloudflare Pages for reliability.
+3. Publish the full interactive app to DeWEB; the static proof page is already live at 1-2-413.tapekit.org.
 4. Add X-handle + wallet entry with Turnstile and a signed entry receipt.
 5. Add multi-winner draws and ERC-20/NFT prizes.
 6. Move the indexer to Postgres and add event-based reconciliation.

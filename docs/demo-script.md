@@ -6,6 +6,7 @@
 - The settled proof is at: https://proofdrop-1xx.pages.dev/d/1/proof
 - The mainnet draw #1, “First Silicon,” is settled: winner `0x2516…d628`, settlement tx `0x95f2…d46f`.
 - The open judge draw is #2, “The Open Draw,” at https://proofdrop-1xx.pages.dev/d/2: 0.002 OKB, 30-day window, 3 seeded entries.
+- The DeWEB copy of draw #1 is live at https://1-2-413.tapekit.org.
 - Optional: if you create a new mainnet draw during the recording, use a small prize and keep the explorer tab open. Do not stage a fake draw.
 
 ## Timeline
@@ -47,14 +48,14 @@ If the phone wallet fails, explain the flow over the seeded entrant list. Do not
 **Visual:** Proof page; scroll to the round table, then the Merkle proof, then the settlement link.
 
 **Voiceover:**
-> “This is the receipt. Four inputs, four real circuit outputs, a thirty-six-bit accumulator, and the winner index. The proof page publishes the full Merkle proof and the command to replay it on any X Layer RPC. Don’t trust the draw — replay it.”
+> “This is the receipt. Four inputs, four real circuit outputs, a thirty-six-bit accumulator, and the winner index. The proof page publishes the full Merkle proof and the command to replay it on any X Layer RPC. It is also stored on X Layer as a DeWEB site, so the receipt outlives the app. Don’t trust the draw — replay it.”
 
 ### 2:20–3:00 — Business and close
 
 **Visual:** Landing page → creator section → closing CTA.
 
 **Voiceover:**
-> “Creators pay one percent per draw. Entrants pay nothing. The proof page is permanent, shareable, and designed to be published to DeWEB. Weekly drops, one receipt each. That is ProofDrop.”
+> “Creators pay one percent per draw. Entrants pay nothing. The proof page is permanent, shareable, and live on DeWEB. Weekly drops, one receipt each. That is ProofDrop.”
 
 ## Backup shots
 
@@ -67,4 +68,4 @@ If the phone wallet fails, explain the flow over the seeded entrant list. Do not
 - “Trustless.” The creator and the block producer have bounded powers; the README discloses them.
 - “Provably random.” The seed is a block hash; the decision is deterministic and replayable, not magic.
 - “Audited.” There has been no independent audit.
-- “DeWEB live.” The build is DeWEB-ready; the current live surface is Cloudflare Pages.
+- “The whole app is on DeWEB.” Only the static proof page is on DeWEB; the interactive app is on Cloudflare Pages.

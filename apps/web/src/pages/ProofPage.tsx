@@ -205,6 +205,7 @@ export function ProofPage() {
         </div>
         <div className="verify-links">
           <a href={`${window.location.origin}${window.location.pathname}#verify`} className="text-link">Permalink</a>
+          <a href="https://1-2-413.tapekit.org" target="_blank" rel="noreferrer" className="text-link">DeWEB proof ↗</a>
           <a href={`${explorer}/address/${proof.circuit.processor}`} target="_blank" rel="noreferrer" className="text-link">Processor ↗</a>
           <a href={`${explorer}/address/${draw.creator}`} target="_blank" rel="noreferrer" className="text-link">Creator ↗</a>
           {draw.txHash && <a href={`${explorer}/tx/${draw.txHash}`} target="_blank" rel="noreferrer" className="text-link">Settlement tx ↗</a>}

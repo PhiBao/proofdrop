@@ -14,13 +14,13 @@ Creators escrow a prize on X Layer and a taped-out TapeOut circuit — not a ser
 
 ## Short description (≈ 150 words)
 
-ProofDrop is a verifiable giveaway protocol for creators. A creator escrows the prize on X Layer, entrants sign free one-address entries, and the entrant list is committed before a future block hash exists. The contract captures that hash and calls a TapeOut circuit four times; the 9-bit outputs form a 36-bit accumulator, and the winner index is that number modulo the entrant count. The winner is paid from escrow after an index-bound Merkle proof. Every draw has a permanent proof page showing the seed, circuit ID, every round input/output, the Merkle proof, and the settlement transaction. The fee is 1% of the prize (minimum 0.0001 OKB on the live deployment), charged at escrow; entrants pay nothing. The proof page is a static build designed to be published to DeWEB, so the receipt outlives the post that announced the giveaway.
+ProofDrop is a verifiable giveaway protocol for creators. A creator escrows the prize on X Layer, entrants sign free one-address entries, and the entrant list is committed before a future block hash exists. The contract captures that hash and calls a TapeOut circuit four times; the 9-bit outputs form a 36-bit accumulator, and the winner index is that number modulo the entrant count. The winner is paid from escrow after an index-bound Merkle proof. Every draw has a permanent proof page showing the seed, circuit ID, every round input/output, the Merkle proof, and the settlement transaction. The fee is 1% of the prize (minimum 0.0001 OKB on the live deployment), charged at escrow; entrants pay nothing. The proof page is published to DeWEB, so the receipt outlives the post that announced the giveaway.
 
 ## Target users and distribution
 
 - **Initial user:** independent creators and Web3 communities running recurring giveaways on X, Telegram, or Discord.
 - **Their pain:** rigging accusations, non-delivery, screenshots that prove nothing.
-- **Reach them:** the creator’s own audience; every entrant gets a public proof page; the proof page is shareable and DeWEB-publishable; FabX’s DeWEB traffic incentives give creators a second reason to keep the page live.
+- **Reach them:** the creator’s own audience; every entrant gets a public proof page; the proof page is shareable and live on DeWEB; FabX’s DeWEB traffic incentives give creators a second reason to keep the page live.
 - **Expansion:** creator agencies, token communities, NFT projects, and event organizers.
 
 ## Revenue model
@@ -46,6 +46,7 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - App: https://proofdrop-1xx.pages.dev
 - API: https://proofdrop-api.fly.dev
 - Proof: https://proofdrop-1xx.pages.dev/d/1/proof
+- DeWEB proof: https://1-2-413.tapekit.org (name `1.2.413.tape`)
 - Open draw: https://proofdrop-1xx.pages.dev/d/2
 - Mainnet escrow: `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb`
 - Processor: “ProofDrop Draw,” 10,000 transistor supply; circuit #1 burned 403 NAND.
@@ -63,8 +64,8 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - Perfect sybil resistance.
 - Block-producer neutrality.
 - An independent audit.
-- DeWEB is live for this build; the static build is DeWEB-ready and the current live surface is Cloudflare Pages.
-- There is one settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB) at submission time.
+- The DeWEB proof page is live; the full interactive app is on Cloudflare Pages.
+- There is one settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB) at submission time. The proof page is live on DeWEB.
 
 ## Links
 

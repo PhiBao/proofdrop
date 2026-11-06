@@ -57,7 +57,7 @@ export function Layout() {
           </div>
           <div>
             <span className="mono-label">PROOF</span>
-            <a href="#verify">Verify a draw</a>
+            <a href="https://1-2-413.tapekit.org" target="_blank" rel="noreferrer">DeWEB proof ↗</a>
             <a href="https://github.com/PhiBao/proofdrop" target="_blank" rel="noreferrer">Source ↗</a>
           </div>
         </div>
