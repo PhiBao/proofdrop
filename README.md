@@ -280,7 +280,7 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Draw #1 commit tx | [`0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38`](https://www.okx.com/web3/explorer/xlayer/tx/0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38) |
 | Draw #1 draw tx | [`0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d`](https://www.okx.com/web3/explorer/xlayer/tx/0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d) |
 | Draw #1 settlement tx | [`0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f`](https://www.okx.com/web3/explorer/xlayer/tx/0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f) |
-| Free signed entries | 3 public entries; signatures verified server-side; one address per draw |
+| Free signed entries | Draw #1: 3 public entries. Open draw #2: 4 entries (3 seeded, 1 demo). Signatures verified server-side; one address per draw. |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
 | Demo video | 100 seconds, 1920×1080, captions: https://proofdrop-1xx.pages.dev/demo |
 | Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
