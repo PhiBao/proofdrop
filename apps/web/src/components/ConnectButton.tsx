@@ -5,12 +5,13 @@ import { activeChain } from '../wagmi'
 import { shortAddress } from '../lib/format'
 
 export function ConnectButton() {
-  const { address, isConnected, chainId } = useAccount()
+  const { address, connector, isConnected, chainId } = useAccount()
   const { connectors, connect, isPending, error } = useConnect()
   const { disconnect } = useDisconnect()
-  const { switchChain, isPending: switching } = useSwitchChain()
+  const { switchChain, switchChainAsync, isPending: switching } = useSwitchChain()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const autoSwitch = useRef<string | null>(null)
 
   useEffect(() => {
     function onDoc(event: MouseEvent) {
@@ -19,6 +20,42 @@ export function ConnectButton() {
     document.addEventListener('mousedown', onDoc)
     return () => document.removeEventListener('mousedown', onDoc)
   }, [])
+
+  // A draw only exists on one chain. Ask the wallet to move to it as soon as
+  // an account appears, then stop asking for that account/chain pair so a
+  // rejected request does not turn into a popup loop.
+  useEffect(() => {
+    if (!isConnected || !address || chainId === undefined) return
+    if (chainId === activeChain.id) {
+      autoSwitch.current = null
+      return
+    }
+
+    const key = `${address}:${chainId}`
+    if (autoSwitch.current === key || switching) return
+    autoSwitch.current = key
+
+    void (async () => {
+      try {
+        await switchChainAsync({ chainId: activeChain.id })
+
+        // Some wallets add X Layer during the 4902 fallback but leave the
+        // active chain unchanged. Check the provider and switch once more.
+        const provider = (await connector?.getProvider()) as
+          | { request?: (args: { method: string; params?: unknown[] }) => Promise<unknown> }
+          | undefined
+        if (!provider?.request) return
+        const current = await provider.request({ method: 'eth_chainId' })
+        if (Number(current) === activeChain.id) return
+        await provider.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: `0x${activeChain.id.toString(16)}` }],
+        })
+      } catch {
+        // The manual switch in the wallet menu remains available.
+      }
+    })()
+  }, [address, chainId, connector, isConnected, switchChainAsync, switching])
 
   if (isConnected && address) {
     const wrongChain = chainId !== activeChain.id
