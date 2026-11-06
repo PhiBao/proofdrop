@@ -24,7 +24,7 @@ export function DrawPage() {
   const id = Number(rawId)
   const queryClient = useQueryClient()
   const { address, chainId, isConnected } = useAccount()
-  const { switchToActiveChain, switching, error: switchError, clearError: clearSwitchError } = useSwitchToActiveChain()
+  const { switchToActiveChain, switching } = useSwitchToActiveChain()
   const { signMessageAsync } = useSignMessage()
   const { writeContractAsync } = useWriteContract()
   const [claimHash, setClaimHash] = useState<`0x${string}` | undefined>()
@@ -32,7 +32,6 @@ export function DrawPage() {
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const wrongChain = isConnected && chainId !== activeChain.id
-  const shownError = error ?? switchError
 
   const drawQuery = useQuery({
     queryKey: ['draw', id],
@@ -206,11 +205,11 @@ export function DrawPage() {
         </div>
       </div>
 
-      {(message || shownError) && (
-        <div className={shownError ? 'notice notice-error' : 'notice'}>
-          <span className="mono-label">{shownError ? 'ERROR' : 'OK'}</span>
-          <p>{shownError ?? message}</p>
-          <button className="notice-close" onClick={() => { setError(null); setMessage(null); clearSwitchError() }}>×</button>
+      {(message || error) && (
+        <div className={error ? 'notice notice-error' : 'notice'}>
+          <span className="mono-label">{error ? 'ERROR' : 'OK'}</span>
+          <p>{error ?? message}</p>
+          <button className="notice-close" onClick={() => { setError(null); setMessage(null) }}>×</button>
         </div>
       )}
 

@@ -29,7 +29,7 @@ const WINDOWS = [
 export function Create() {
   const navigate = useNavigate()
   const { address, isConnected, chainId } = useAccount()
-  const { switchToActiveChain, switching, error: switchError } = useSwitchToActiveChain()
+  const { switchToActiveChain, switching } = useSwitchToActiveChain()
   const { signMessageAsync } = useSignMessage()
   const { writeContractAsync } = useWriteContract()
   const publicClient = usePublicClient()
@@ -65,7 +65,6 @@ export function Create() {
   const feeReady = feeRead.isSuccess
   const closeTime = Math.floor(Date.now() / 1000) + windowMinutes * 60
   const wrongChain = isConnected && chainId !== activeChain.id
-  const shownError = error ?? switchError
 
   const create = useMutation({
     mutationFn: async () => {
@@ -145,10 +144,10 @@ export function Create() {
         </div>
       </div>
 
-      {shownError && (
+      {error && (
         <div className="notice notice-error">
           <span className="mono-label">ERROR</span>
-          <p>{shownError}</p>
+          <p>{error}</p>
         </div>
       )}
 
