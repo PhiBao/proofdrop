@@ -82,6 +82,11 @@ export function Layout() {
             <Link to="/demo">Demo</Link>
             <a href="https://github.com/PhiBao/proofdrop" target="_blank" rel="noreferrer">Source ↗</a>
           </div>
+          <div>
+            <span className="mono-label">CONNECT</span>
+            <a href="https://x.com/xProofDrop" target="_blank" rel="noreferrer">X · @xProofDrop ↗</a>
+            <a href="https://www.linkedin.com/in/kiter-phi-bao/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          </div>
         </div>
         <p className="footer-fine mono">
           NO CUSTODIAN · NO ORACLE · CIRCUIT-DECIDED · X LAYER {activeChain.id}

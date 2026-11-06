@@ -47,10 +47,10 @@ export function DemoPage() {
           poster="/demo/poster.jpg"
         >
           <source
-            src="https://cdn.jsdelivr.net/gh/PhiBao/proofdrop@main/apps/web/public/demo/proofdrop-demo.mp4"
+            src="https://cdn.jsdelivr.net/gh/PhiBao/proofdrop@main/apps/web/public/demo/proofdrop-demo-2.mp4"
             type="video/mp4"
           />
-          <source src="/demo/proofdrop-demo.mp4" type="video/mp4" />
+          <source src="/demo/proofdrop-demo-2.mp4" type="video/mp4" />
         </video>
       </div>
 

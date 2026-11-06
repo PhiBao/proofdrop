@@ -2099,7 +2099,8 @@ code {
 
 .footer-cols {
   display: flex;
-  gap: 64px;
+  flex-wrap: wrap;
+  gap: 28px 56px;
   justify-content: flex-end;
 }
 

@@ -4,12 +4,14 @@
 
 ProofDrop is a verifiable giveaway protocol for creators. A creator escrows a prize on X Layer, entrants sign free entries, and a taped-out TapeOut circuit — not a server, not an oracle, not the creator — decides the winner. Every draw ends with a permanent proof page that anyone can replay.
 
-- **Live app:** https://proofdrop-1xx.pages.dev
+- **Live app:** https://proofdrop.uconfidant.tech/
 - **API:** https://proofdrop-api.fly.dev
-- **Demo video:** https://proofdrop-1xx.pages.dev/demo (100 seconds, captions)
-- **Demo proof:** https://proofdrop-1xx.pages.dev/d/1/proof
+- **Demo video:** https://proofdrop.uconfidant.tech/demo (100 seconds, captions)
+- **Demo proof:** https://proofdrop.uconfidant.tech/d/1/proof
 - **Network:** X Layer mainnet (chain 196). The live draw is settled on mainnet and calls the real TapeOut circuit; see [Verification](#verification).
 - **Source:** https://github.com/PhiBao/proofdrop
+- **X:** https://x.com/xProofDrop
+- **LinkedIn:** https://www.linkedin.com/in/kiter-phi-bao/
 - **Built for:** X Layer TapeOut Accelerate (Build X Series), deadline Dec 7, 2026.
 
 ---
@@ -286,12 +288,12 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Draw #1 settlement tx | [`0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f`](https://www.okx.com/web3/explorer/xlayer/tx/0x95f202eb4a244fee0ea9d863cdce5dc5c586afb28b97d513713983de51b4d46f) |
 | Free signed entries | Draw #1: 3 public entries. Open draw #2: 4 entries (3 seeded, 1 demo). Signatures verified server-side; one address per draw. |
 | Merkle commitment + proof | Index-bound root committed on-chain; proof page prints the full proof |
-| Demo video | 100 seconds, 1920×1080, captions: https://proofdrop-1xx.pages.dev/demo |
-| Proof page | Public at https://proofdrop-1xx.pages.dev/d/1/proof |
+| Demo video | 100 seconds, 1920×1080, captions: https://proofdrop.uconfidant.tech/demo |
+| Proof page | Public at https://proofdrop.uconfidant.tech/d/1/proof |
 | Proof survival | The proof page ships with a static JSON fallback at `/proofs/1.json` and a DeWEB copy at https://1-2-413.tapekit.org. |
 | DeWEB proof | Name `1.2.413.tape`, container `0xa5bfe431…535c`, one file `index.html` (11,137 bytes, sha256 `0x1e3c…de0d`). `isLive` and `isContainerLive` return true. |
 | DeWEB transactions | [open](https://www.okx.com/web3/explorer/xlayer/tx/0x9470d6c5d57b5ed801191ee4329a2ead960876690f77884ee1cb965e6c7ea541) · [publish](https://www.okx.com/web3/explorer/xlayer/tx/0xe947a006c51c4f5fcdd63197e1b3f3cd00072952f787e756bce21be682bc29c1) · [bind](https://www.okx.com/web3/explorer/xlayer/tx/0x6f26821a4aa02a51f5a27f10100d6063c2b49a19491d5d174c790f4cf37f2835) |
-| Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 4 entries (3 seeded, 1 demo): https://proofdrop-1xx.pages.dev/d/2 |
+| Open judge draw | #2 “The Open Draw”, 0.002 OKB, 30-day window, 4 entries (3 seeded, 1 demo): https://proofdrop.uconfidant.tech/d/2 |
 | Rust API | https://proofdrop-api.fly.dev/health |
 
 ### What is real vs simulated
@@ -333,7 +335,7 @@ The proof page publishes the four round inputs, outputs, 9-bit values, accumulat
 
 ## Demo (100 seconds)
 
-The recorded walkthrough is at https://proofdrop-1xx.pages.dev/demo. It runs 100 seconds at 1920×1080 with English captions:
+The recorded walkthrough is at https://proofdrop.uconfidant.tech/demo. It runs 100 seconds at 1920×1080 with English captions:
 
 1. **The problem (0:00).** A screenshot is not a receipt.
 2. **The live draw (0:13).** The open draw and its escrow.

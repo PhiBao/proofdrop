@@ -12,6 +12,14 @@ Giveaways no one has to trust.
 
 Creators escrow a prize on X Layer and a taped-out TapeOut circuit — not a server, not an oracle, not the creator — picks the winner, with a permanent proof page anyone can replay.
 
+## Elevator pitch
+
+ProofDrop lets creators run giveaways without asking anyone to trust a screenshot. The prize is escrowed on X Layer, a taped-out TapeOut circuit picks the winner, and every draw leaves a public proof page anyone can replay.
+
+## Team
+
+I’m a solo software engineer. I built ProofDrop end to end: the Solidity escrow and settlement flow, the Rust API and indexer, the React app, and the custom TapeOut circuit. My background is full-stack product engineering, with a focus on shipping working systems rather than prototypes. LinkedIn: https://www.linkedin.com/in/kiter-phi-bao/. I’m open to finding other teammates, especially around growth, design, and creator partnerships.
+
 ## Short description (≈ 150 words)
 
 ProofDrop is a verifiable giveaway protocol for creators. A creator escrows the prize on X Layer, entrants sign free one-address entries, and the entrant list is committed before a future block hash exists. The contract captures that hash and calls a TapeOut circuit four times; the 9-bit outputs form a 36-bit accumulator, and the winner index is that number modulo the entrant count. The winner is paid from escrow after an index-bound Merkle proof. Every draw has a permanent proof page showing the seed, circuit ID, every round input/output, the Merkle proof, and the settlement transaction. The fee is 1% of the prize (minimum 0.0001 OKB on the live deployment), charged at escrow; entrants pay nothing. The proof page is published to DeWEB, so the receipt outlives the post that announced the giveaway.
@@ -43,12 +51,12 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 
 ## What is live
 
-- App: https://proofdrop-1xx.pages.dev
+- App: https://proofdrop.uconfidant.tech/
 - API: https://proofdrop-api.fly.dev
-- Demo: https://proofdrop-1xx.pages.dev/demo (100 seconds, captions)
-- Proof: https://proofdrop-1xx.pages.dev/d/1/proof
+- Demo: https://proofdrop.uconfidant.tech/demo (100 seconds, captions)
+- Proof: https://proofdrop.uconfidant.tech/d/1/proof
 - DeWEB proof: https://1-2-413.tapekit.org (name `1.2.413.tape`)
-- Open draw: https://proofdrop-1xx.pages.dev/d/2
+- Open draw: https://proofdrop.uconfidant.tech/d/2
 - Mainnet escrow: `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb`
 - Processor: “ProofDrop Draw,” 10,000 transistor supply; circuit #1 burned 403 NAND.
 - Tape-out tx: `0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca`
@@ -70,10 +78,12 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 
 ## Current state
 
-One settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB). The open draw has four entries: three seeded and one real entry recorded for the demo. The proof page is live on DeWEB, and the demo video is at https://proofdrop-1xx.pages.dev/demo.
+One settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB). The open draw has four entries: three seeded and one real entry recorded for the demo. The proof page is live on DeWEB, and the demo video is at https://proofdrop.uconfidant.tech/demo.
 
 ## Links
 
+- X: https://x.com/xProofDrop
+- LinkedIn: https://www.linkedin.com/in/kiter-phi-bao/
 - Source: https://github.com/PhiBao/proofdrop
 - README: https://github.com/PhiBao/proofdrop#readme
 - Architecture: https://github.com/PhiBao/proofdrop/blob/main/docs/diagrams/architecture.html
