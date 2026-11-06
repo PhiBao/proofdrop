@@ -273,6 +273,8 @@ This section is intentionally blunt. The hackathon rules prohibit presenting sim
 | Draw #1 seed block | `75174147` |
 | Draw #1 seed | `0x3b6ce50309ca7131af912ed917cc450e53fe437f6c9cfb1f8e53decaf6da1e6e` |
 | Draw #1 winner | index `0` → `0x2516f212e268708ee4a121f44e58ff4ffa68d628` |
+| Processor + circuit tape-out | “ProofDrop Draw” `0xfdbab…7cac`, circuit `#1`, 403 NAND burned; tx [`0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca`](https://www.okx.com/web3/explorer/xlayer/tx/0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca) |
+| Processor registration | `isCPU(0xfdbab…7cac)` on the X Layer TapeOut factory returns true |
 | Draw #1 create tx | [`0x82f3aa902c377e2df894f391623ec9d46693edd349ac3f66536935eb3e107821`](https://www.okx.com/web3/explorer/xlayer/tx/0x82f3aa902c377e2df894f391623ec9d46693edd349ac3f66536935eb3e107821) |
 | Draw #1 commit tx | [`0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38`](https://www.okx.com/web3/explorer/xlayer/tx/0x2d7c0d7b0a50507a8d67cf093c287ebe22d9a0e0f7cc8dbfa89acc7b34eedc38) |
 | Draw #1 draw tx | [`0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d`](https://www.okx.com/web3/explorer/xlayer/tx/0xb8544249e4b036d459ade9b6d1d342892fb9e0c422f692b52b6d5d360255cb6d) |

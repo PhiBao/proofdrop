@@ -47,7 +47,8 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 - API: https://proofdrop-api.fly.dev
 - Proof: https://proofdrop-1xx.pages.dev/d/1/proof
 - Mainnet escrow: `0x2D2d8bba04Ed8aF72d989b172725B447D4954eBb`
-- Processor supply: 10,000 transistors; circuit #1 burned 403 NAND.
+- Processor: “ProofDrop Draw,” 10,000 transistor supply; circuit #1 burned 403 NAND.
+- Tape-out tx: `0xdc323697f58d3f1d3c6836b8126fbb22dd3847dd9ba0f695137edbf90795c9ca`
 - Draw #1 root: `0xf502b58a94a6543bede59637252bf74b9dc67c8616a16556a98573de314018cf`
 - Draw #1 seed block: `75174147`
 - Draw #1 seed: `0x3b6ce50309ca7131af912ed917cc450e53fe437f6c9cfb1f8e53decaf6da1e6e`
