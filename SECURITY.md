@@ -10,6 +10,10 @@ Open a private security advisory on GitHub or email the maintainer listed in the
 - `apps/api` — signature verification, entrant list, Merkle construction, orchestration.
 - `apps/web` — wallet interactions, message construction, proof rendering.
 
+## Anti-bot
+
+The current entry model is one signed wallet address per draw plus an optional unverified handle. This is not sybil resistance. The documented next stage is an anonymous proof-of-personhood nullifier per draw via Very’s Palm ZK Proof or Liveness Detection; no biometric data should be stored. Privy is an embedded-wallet layer, not a proof-of-personhood system. See `docs/anti-bot.md`.
+
 ## Known risks
 
 The full threat model is in the README’s [Security model](../README.md#security-model). The short version:

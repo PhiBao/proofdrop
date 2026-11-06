@@ -224,9 +224,10 @@ export function ProofPage() {
         <div>
           <span className="mono-label">WHAT IT DOES NOT PROVE</span>
           <p>
-            Sybil resistance is enforced at entry by one-address-one-entry and off-chain abuse
-            checks, not by the circuit. X Layer’s block producer could theoretically influence
-            the seed block. Both limits are documented in the README.
+            One signed address per draw plus off-chain review is not proof of personhood.
+            A wallet farm can still enter multiple times. X Layer’s block producer could
+            theoretically influence the seed block. Both limits are documented in the README
+            and in docs/anti-bot.md.
           </p>
         </div>
       </section>

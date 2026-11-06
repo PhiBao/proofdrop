@@ -355,6 +355,12 @@ A rehearsal script is included: [`scripts/seed-demo.sh`](scripts/seed-demo.sh). 
 - One address per draw (`PRIMARY KEY (draw_id, address)`).
 - Entries close on-chain time; the API rejects late signatures and a committed root freezes the list.
 
+### Anti-bot
+
+The current model is intentionally simple: one signed wallet address per draw, an optional unverified display handle, and manual abuse review. It is **not sybil-proof**; a wallet farm can enter multiple times. The proof page and this README disclose that.
+
+The next stage is an anonymous proof-of-personhood check at entry, using Very’s Palm ZK Proof or Liveness Detection to produce a per-draw nullifier. The API would store only the nullifier hash, never biometric data, and reject duplicates for that draw. Privy is a wallet/onboarding layer, not a substitute for proof of personhood. See [`docs/anti-bot.md`](docs/anti-bot.md).
+
 ### Seed
 
 - The seed block is fixed at commitment (`block.number + 5`).
