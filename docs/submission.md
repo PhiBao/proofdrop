@@ -62,11 +62,15 @@ X Layer TapeOut Accelerate — consumer/creator application built on the TapeOut
 
 ## What is not claimed
 
-- Perfect sybil resistance.
+- Perfect sybil resistance. Entry is one signed wallet address per draw, not proof of personhood.
 - Block-producer neutrality.
 - An independent audit.
-- The DeWEB proof page is live; the full interactive app is on Cloudflare Pages.
-- There is one settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB) at submission time. The proof page is live on DeWEB, and the demo video shows a real entry into the open draw.
+- A full DeWEB deployment of the interactive app. Only the static proof page is on DeWEB.
+- Multi-winner, ERC-20, or NFT prizes in the live contract. The live escrow pays one native-OKB winner.
+
+## Current state
+
+One settled mainnet draw (0.001 OKB) and one open 30-day draw (0.002 OKB). The open draw has four entries: three seeded and one real entry recorded for the demo. The proof page is live on DeWEB, and the demo video is at https://proofdrop-1xx.pages.dev/demo.
 
 ## Links
 

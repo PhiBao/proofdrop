@@ -416,7 +416,7 @@ pnpm --dir apps/web build
 ### Current limitations
 
 - One settled custom-circuit draw plus one open 30-day draw at submission time; the landing features the open draw.
-- Wallet-only entry (no X-handle entry or social login yet).
+- Wallet-only entry. The optional display handle is self-reported, not verified against X.
 - One winner per draw; no multi-winner or NFT prize support.
 - SQLite is appropriate for a single-instance demo, not a multi-region production service.
 - The full interactive app is on Cloudflare Pages; the DeWEB copy is the static proof page. The container opener cost 0.08 OKB, paid once.
@@ -424,13 +424,14 @@ pnpm --dir apps/web build
 
 ### Next steps
 
-1. Run recurring mainnet draws and keep one open for the submission window.
-2. Tape out a dedicated draw circuit (16-bit xorshift + rejection) and publish its processor address and circuit ID.
-3. Publish the full interactive app to DeWEB; the static proof page is already live at 1-2-413.tapekit.org.
-4. Add X-handle + wallet entry with Turnstile and a signed entry receipt.
+1. Run recurring mainnet draws with real creators. The open draw is live now; the next milestone is a third-party creator drop.
+2. Publish the full interactive app to DeWEB. The static proof page is already live at 1-2-413.tapekit.org.
+3. Add anonymous proof-of-personhood at entry with Very's Palm ZK Proof or Liveness Detection, plus Turnstile for web abuse. The current one-address entry model is documented in [`docs/anti-bot.md`](docs/anti-bot.md).
+4. Add TapeSend delivery of the proof and claim link to the winner.
 5. Add multi-winner draws and ERC-20/NFT prizes.
-6. Move the indexer to Postgres and add event-based reconciliation.
-7. Independent audit of the escrow and the draw math.
+6. Make list commitment permissionless against the published entry count and root.
+7. Move the indexer to Postgres and add event-based reconciliation.
+8. Independent audit of the escrow and the draw math.
 
 ---
 
