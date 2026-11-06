@@ -18,7 +18,7 @@ export function Layout() {
   const isProof = location.pathname.endsWith('/proof')
   const { isConnected, chainId } = useAccount()
   const { switchToActiveChain, switching, error: switchError } = useSwitchToActiveChain()
-  const wrongChain = isConnected && chainId !== activeChain.id
+  const wrongChain = isConnected && chainId !== undefined && chainId !== activeChain.id
 
   return (
     <div className="shell">
